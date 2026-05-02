@@ -1,20 +1,33 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type PrimaryButtonProps = {
   label: string;
   onPress?: () => void;
 };
 
+const styles = StyleSheet.create({
+  button: {
+    overflow: "hidden",
+    borderRadius: 16,
+    backgroundColor: "#3b82f6",
+  },
+  inner: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  label: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#ffffff",
+  },
+});
+
 export function PrimaryButton({ label, onPress }: PrimaryButtonProps) {
   return (
-    <Pressable
-      onPress={onPress}
-      className="overflow-hidden rounded-2xl bg-blue-500"
-    >
-      <View className="px-5 py-4">
-        <Text className="text-center text-base font-semibold text-white">
-          {label}
-        </Text>
+    <Pressable onPress={onPress} style={styles.button}>
+      <View style={styles.inner}>
+        <Text style={styles.label}>{label}</Text>
       </View>
     </Pressable>
   );

@@ -1,10 +1,18 @@
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HomeScreen } from "./src/screens/HomeScreen";
 
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#020617",
+  },
+});
+
 export default function App() {
   return (
-    <SafeAreaView className="flex-1 bg-slate-950">
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
       <HomeScreen />
     </SafeAreaView>

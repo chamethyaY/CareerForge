@@ -1,50 +1,92 @@
-import { Text, View } from "react-native";
-import { FeatureCard } from "../components/FeatureCard";
-import { PrimaryButton } from "../components/PrimaryButton";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text, View } from "react-native";
 
-const features = [
-  {
-    title: "Expo + TypeScript",
-    description: "A strongly typed mobile foundation with a fast development loop."
+const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
   },
-  {
-    title: "NativeWind",
-    description: "Utility-first styling for React Native with Tailwind-style classes."
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24,
   },
-  {
-    title: "Supabase ready",
-    description: "Centralized client setup for auth, database, and storage calls."
-  }
-];
+  content: {
+    alignItems: "center",
+    marginTop: -72,
+  },
+  iconBox: {
+    width: 112,
+    height: 112,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.12)",
+  },
+  title: {
+    marginTop: 28,
+    fontSize: 48,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+  },
+  subtitle: {
+    marginTop: 12,
+    fontSize: 20,
+    fontWeight: "500",
+    textAlign: "center",
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+  paginationContainer: {
+    marginTop: 80,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+  },
+  paginationDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#FFFFFF",
+  },
+  dot1: {
+    opacity: 0.9,
+  },
+  dot2: {
+    opacity: 0.55,
+  },
+  dot3: {
+    opacity: 0.35,
+  },
+});
 
 export function HomeScreen() {
   return (
-    <View className="flex-1 bg-slate-950 px-5 py-6">
-      <View className="mb-8 rounded-[32px] border border-slate-800 bg-slate-900 px-5 py-8">
-        <Text className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-400">
-          CareerForge
-        </Text>
-        <Text className="mt-3 text-4xl font-bold leading-tight text-white">
-          Expo starter for mobile product work.
-        </Text>
-        <Text className="mt-4 text-base leading-6 text-slate-400">
-          Clean TypeScript structure, Tailwind-style styling, and a Supabase client
-          ready for authentication and data flows.
-        </Text>
-        <View className="mt-6">
-          <PrimaryButton label="Start building" />
+    <LinearGradient
+      colors={["#7D66FF", "#B365D6", "#39C2E2"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.gradient}
+    >
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.iconBox}>
+            <Ionicons name="sparkles-outline" size={48} color="#FFFFFF" />
+          </View>
+
+          <Text style={styles.title}>CareerForge</Text>
+          <Text style={styles.subtitle}>
+            AI-Powered Career Operating System
+          </Text>
+
+          <View style={styles.paginationContainer}>
+            <View style={[styles.paginationDot, styles.dot1]} />
+            <View style={[styles.paginationDot, styles.dot2]} />
+            <View style={[styles.paginationDot, styles.dot3]} />
+          </View>
         </View>
       </View>
-
-      <View className="gap-4">
-        {features.map((feature) => (
-          <FeatureCard
-            key={feature.title}
-            title={feature.title}
-            description={feature.description}
-          />
-        ))}
-      </View>
-    </View>
+    </LinearGradient>
   );
 }
