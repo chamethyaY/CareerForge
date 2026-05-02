@@ -75,10 +75,9 @@ const styles = StyleSheet.create({
   },
   navBar: {
     position: "absolute",
-    left: 16,
-    right: 16,
-    bottom: 24,
-    borderRadius: 28,
+    left: 0,
+    right: 0,
+    bottom: 0,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.22)",
     backgroundColor: "rgba(8, 15, 38, 0.82)",
