@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { SignIn } from "./src/screens/signIn";
 import { SignUp } from "./src/screens/SignUp";
 import { SplashScreen } from "./src/screens/SplashScreen";
+import { Verify } from "./src/screens/Verify";
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -14,9 +15,10 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<"splash" | "signin" | "signup">(
-    "splash",
-  );
+  const [currentScreen, setCurrentScreen] = useState<
+    "splash" | "signin" | "signup" | "verify"
+  >("splash");
+  const [verifyEmail, setVerifyEmail] = useState("");
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,8 +27,22 @@ export default function App() {
         <SplashScreen onNavigateToLogin={() => setCurrentScreen("signin")} />
       ) : currentScreen === "signin" ? (
         <SignIn onNavigateToSignUp={() => setCurrentScreen("signup")} />
+      ) : currentScreen === "signup" ? (
+        <SignUp
+          onNavigateToSignIn={() => setCurrentScreen("signin")}
+          onNavigateToVerify={(email) => {
+            setVerifyEmail(email);
+            setCurrentScreen("verify");
+          }}
+        />
       ) : (
-        <SignUp onNavigateToSignIn={() => setCurrentScreen("signin")} />
+        <Verify
+          email={verifyEmail}
+          onNavigateToSignIn={() => setCurrentScreen("signin")}
+          onNavigateToHome={() => {
+            setCurrentScreen("signin");
+          }}
+        />
       )}
     </SafeAreaView>
   );
