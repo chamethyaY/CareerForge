@@ -9,6 +9,7 @@ import { Verify } from "./src/screens/Verify";
 import { ForgotPassword } from "./src/screens/ForgotPassword";
 import { ResetPassword } from "./src/screens/ResetPassword";
 import { Dashboard } from "./src/screens/Dashboard";
+import { CurrentLevel } from "./src/screens/CurrentLevel";
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -19,7 +20,14 @@ const styles = StyleSheet.create({
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "splash" | "signin" | "signup" | "verify" | "dashboard" | "forgot" | "reset"
+    | "splash"
+    | "signin"
+    | "signup"
+    | "verify"
+    | "dashboard"
+    | "forgot"
+    | "reset"
+    | "level"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
@@ -82,8 +90,15 @@ export default function App() {
           onBack={() => setCurrentScreen("verify")}
           onSuccess={() => setCurrentScreen("signin")}
         />
+      ) : currentScreen === "level" ? (
+        <CurrentLevel
+          onBackToDashboard={() => setCurrentScreen("dashboard")}
+        />
       ) : (
-        <Dashboard onSignOut={() => setCurrentScreen("signin")} />
+        <Dashboard
+          onSignOut={() => setCurrentScreen("signin")}
+          onContinue={() => setCurrentScreen("level")}
+        />
       )}
     </SafeAreaView>
   );
