@@ -7,6 +7,7 @@ import { SignUp } from "./src/screens/SignUp";
 import { SplashScreen } from "./src/screens/SplashScreen";
 import { Verify } from "./src/screens/Verify";
 import { ForgotPassword } from "./src/screens/ForgotPassword";
+import { ResetPassword } from "./src/screens/ResetPassword";
 import { Dashboard } from "./src/screens/Dashboard";
 
 const styles = StyleSheet.create({
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "splash" | "signin" | "signup" | "verify" | "dashboard" | "forgot"
+    "splash" | "signin" | "signup" | "verify" | "dashboard" | "forgot" | "reset"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
@@ -70,9 +71,16 @@ export default function App() {
           email={verifyEmail}
           mode={verifyFlow}
           onNavigateToSignIn={() => setCurrentScreen("signin")}
+          onNavigateToReset={() => setCurrentScreen("reset")}
           onNavigateToHome={() => {
             setCurrentScreen("dashboard");
           }}
+        />
+      ) : currentScreen === "reset" ? (
+        <ResetPassword
+          email={verifyEmail}
+          onBack={() => setCurrentScreen("verify")}
+          onSuccess={() => setCurrentScreen("signin")}
         />
       ) : (
         <Dashboard onSignOut={() => setCurrentScreen("signin")} />

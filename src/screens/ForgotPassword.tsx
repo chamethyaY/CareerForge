@@ -47,7 +47,10 @@ export function ForgotPassword({
         return;
       }
 
-      Alert.alert("Check your email", `We've sent a 6-digit code to ${email.trim().toLowerCase()}`);
+      Alert.alert(
+        "Check your email",
+        `We've sent a 6-digit code to ${email.trim().toLowerCase()}`,
+      );
       onSend?.(email.trim().toLowerCase());
     } finally {
       setLoading(false);
@@ -60,7 +63,11 @@ export function ForgotPassword({
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <TouchableOpacity onPress={() => onBack?.()} style={styles.backButton} accessibilityLabel="Back">
+        <TouchableOpacity
+          onPress={() => onBack?.()}
+          style={styles.backButton}
+          accessibilityLabel="Back"
+        >
           <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
         </TouchableOpacity>
 
@@ -79,10 +86,22 @@ export function ForgotPassword({
 
           <View style={styles.form}>
             <Text style={styles.heading}>Forgot password</Text>
-            <Text style={styles.subtitle}>Enter your email and we'll send a 6-digit code.</Text>
+            <Text style={styles.subtitle}>
+              Enter your email and we'll send a 6-digit code.
+            </Text>
 
-            <View style={[styles.inputContainer, { width: Math.min(520, screenWidth - 48) }]}>
-              <Ionicons name="mail-outline" size={20} color="rgba(255,255,255,0.5)" style={styles.inputIcon} />
+            <View
+              style={[
+                styles.inputContainer,
+                { width: Math.min(520, screenWidth - 48) },
+              ]}
+            >
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+                style={styles.inputIcon}
+              />
               <TextInput
                 ref={emailRef}
                 style={styles.input}
@@ -97,14 +116,23 @@ export function ForgotPassword({
               />
             </View>
 
-            <TouchableOpacity activeOpacity={0.9} onPress={handleSend} disabled={loading}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={handleSend}
+              disabled={loading}
+            >
               <LinearGradient
                 colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={[styles.sendButton, { width: Math.min(520, screenWidth - 48) }]}
+                style={[
+                  styles.sendButton,
+                  { width: Math.min(520, screenWidth - 48) },
+                ]}
               >
-                <Text style={styles.sendButtonText}>{loading ? "Sending..." : "Send link"}</Text>
+                <Text style={styles.sendButtonText}>
+                  {loading ? "Sending..." : "Send link"}
+                </Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -186,6 +214,12 @@ const styles = StyleSheet.create({
   },
   inputIcon: { marginRight: 12 },
   input: { flex: 1, paddingVertical: 12, color: "#FFFFFF", fontSize: 16 },
-  sendButton: { borderRadius: 14, paddingVertical: 16, alignItems: "center", justifyContent: "center", marginBottom: 18 },
+  sendButton: {
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
   sendButtonText: { fontSize: 16, fontWeight: "700", color: "#FFFFFF" },
 });

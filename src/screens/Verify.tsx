@@ -20,6 +20,7 @@ type VerifyProps = {
   email: string;
   mode?: "signup" | "recovery";
   onNavigateToSignIn?: () => void;
+  onNavigateToReset?: () => void;
   onNavigateToHome?: () => void;
 };
 
@@ -29,6 +30,7 @@ export function Verify({
   email,
   mode = "signup",
   onNavigateToSignIn,
+  onNavigateToReset,
   onNavigateToHome,
 }: VerifyProps) {
   const [otp, setOtp] = useState("");
@@ -74,9 +76,9 @@ export function Verify({
       if (mode === "recovery") {
         Alert.alert(
           "Code verified",
-          "Your recovery code is verified. Please sign in with your new password.",
+          "Your recovery code is verified. Please set your new password.",
         );
-        onNavigateToSignIn?.();
+        onNavigateToReset?.();
         return;
       }
 
@@ -141,6 +143,14 @@ export function Verify({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View style={styles.content}>
+          <TouchableOpacity
+            onPress={() => onNavigateToSignIn?.()}
+            style={styles.backButton}
+            accessibilityLabel="Back"
+          >
+            <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          </TouchableOpacity>
+
           <View style={styles.topIconWrap}>
             <View style={styles.iconShadow} />
             <LinearGradient
@@ -258,6 +268,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "flex-start",
+    position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    top: 8,
+    left: 0,
+    zIndex: 10,
+    padding: 4,
   },
   form: {
     marginTop: 28,
