@@ -225,32 +225,7 @@ export function SignIn({
               </LinearGradient>
             </TouchableOpacity>
 
-            <View
-              style={[
-                styles.dividerContainer,
-                { width: Math.min(520, screenWidth - 48) },
-              ]}
-            >
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>or continue with</Text>
-              <View style={styles.dividerLine} />
-            </View>
 
-            <View
-              style={[
-                styles.socialContainer,
-                { width: Math.min(520, screenWidth - 48) },
-              ]}
-            >
-              <TouchableOpacity style={styles.socialButton}>
-                <Ionicons name="logo-google" size={18} color="#FFFFFF" />
-                <Text style={styles.socialButtonText}>Google</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton}>
-                <Ionicons name="logo-github" size={18} color="#FFFFFF" />
-                <Text style={styles.socialButtonText}>GitHub</Text>
-              </TouchableOpacity>
-            </View>
           </View>
 
           <View style={styles.signUpContainer}>
@@ -378,44 +353,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#FFFFFF",
   },
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 18,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-  },
-  dividerText: {
-    marginHorizontal: 12,
-    fontSize: 13,
-    color: "rgba(255, 255, 255, 0.5)",
-  },
-  socialContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-    marginBottom: 24,
-  },
-  socialButton: {
-    width: "48%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    borderRadius: 12,
-    paddingVertical: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.02)",
-  },
-  socialButtonText: {
-    marginLeft: 8,
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#FFFFFF",
-  },
+
   signUpContainer: {
     flexDirection: "row",
     justifyContent: "center",
