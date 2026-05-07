@@ -18,6 +18,7 @@ import {
 
 type VerifyProps = {
   email: string;
+  mode?: "signup" | "recovery";
   onNavigateToSignIn?: () => void;
   onNavigateToHome?: () => void;
 };
@@ -26,6 +27,7 @@ const OTP_LENGTH = 6;
 
 export function Verify({
   email,
+  mode = "signup",
   onNavigateToSignIn,
   onNavigateToHome,
 }: VerifyProps) {
@@ -54,14 +56,27 @@ export function Verify({
 
     setLoading(true);
     try {
-      const { error: verifyError } = await supabase.auth.verifyOtp({
+      const otpType = mode === "recovery" ? "email" : "signup";
+      const { error: verifyError, data } = await supabase.auth.verifyOtp({
         email,
         token: otp,
-        type: "signup",
+        type: otpType,
       });
+
+      // eslint-disable-next-line no-console
+      console.log("verifyOtp result:", { verifyError, data, mode, otpType });
 
       if (verifyError) {
         setError(verifyError.message || "Verification failed.");
+        return;
+      }
+
+      if (mode === "recovery") {
+        Alert.alert(
+          "Code verified",
+          "Your recovery code is verified. Please sign in with your new password.",
+        );
+        onNavigateToSignIn?.();
         return;
       }
 
@@ -77,17 +92,30 @@ export function Verify({
     setError(null);
     setResendLoading(true);
     try {
-      const { error: resendError } = await supabase.auth.resend({
-        type: "signup",
-        email,
-      });
+      const resendResult =
+        mode === "recovery"
+          ? await supabase.auth.signInWithOtp({
+              email: email.toLowerCase(),
+              options: {
+                shouldCreateUser: false,
+              },
+            })
+          : await supabase.auth.resend({
+              type: "signup",
+              email,
+            });
+
+      const resendError = resendResult.error;
 
       if (resendError) {
         setError(resendError.message || "Resend failed.");
         return;
       }
 
-      Alert.alert("Code Resent", "A new verification code has been sent to your email.");
+      Alert.alert(
+        "Code Resent",
+        "A new verification code has been sent to your email.",
+      );
       // start a cooldown to avoid hammering the email endpoint
       setResendCooldown(30);
     } catch (e: any) {
@@ -99,7 +127,10 @@ export function Verify({
 
   useEffect(() => {
     if (!resendCooldown) return;
-    const timer = setInterval(() => setResendCooldown((c) => Math.max(0, c - 1)), 1000);
+    const timer = setInterval(
+      () => setResendCooldown((c) => Math.max(0, c - 1)),
+      1000,
+    );
     return () => clearInterval(timer);
   }, [resendCooldown]);
 
@@ -123,9 +154,13 @@ export function Verify({
           </View>
 
           <View style={styles.form}>
-            <Text style={styles.heading}>Verify Your Email</Text>
+            <Text style={styles.heading}>
+              {mode === "recovery" ? "Verify Reset Code" : "Verify Your Email"}
+            </Text>
             <Text style={styles.subtitle}>
-              Enter the {OTP_LENGTH}-digit code sent to {email}
+              {mode === "recovery"
+                ? `Enter the ${OTP_LENGTH}-digit reset code sent to ${email}`
+                : `Enter the ${OTP_LENGTH}-digit code sent to ${email}`}
             </Text>
 
             <View
@@ -193,15 +228,17 @@ export function Verify({
                 {resendLoading
                   ? "Resending..."
                   : resendCooldown
-                  ? `Resend available in ${resendCooldown}s`
-                  : "Didn't receive the code? Resend"}
+                    ? `Resend available in ${resendCooldown}s`
+                    : "Didn't receive the code? Resend"}
               </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.backContainer}>
             <TouchableOpacity onPress={() => onNavigateToSignIn?.()}>
-              <Text style={styles.backLink}>Back to Sign Up</Text>
+              <Text style={styles.backLink}>
+                {mode === "recovery" ? "Back to Sign In" : "Back to Sign Up"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

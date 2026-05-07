@@ -6,6 +6,7 @@ import { SignIn } from "./src/screens/signIn";
 import { SignUp } from "./src/screens/SignUp";
 import { SplashScreen } from "./src/screens/SplashScreen";
 import { Verify } from "./src/screens/Verify";
+import { ForgotPassword } from "./src/screens/ForgotPassword";
 import { Dashboard } from "./src/screens/Dashboard";
 
 const styles = StyleSheet.create({
@@ -17,10 +18,13 @@ const styles = StyleSheet.create({
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "splash" | "signin" | "signup" | "verify" | "dashboard"
+    "splash" | "signin" | "signup" | "verify" | "dashboard" | "forgot"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
-  const [splashNextScreen, setSplashNextScreen] = useState<"signin" | "dashboard">("signin");
+  const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
+  const [splashNextScreen, setSplashNextScreen] = useState<
+    "signin" | "dashboard"
+  >("signin");
 
   const handleSplashComplete = () => {
     setCurrentScreen(splashNextScreen);
@@ -34,9 +38,21 @@ export default function App() {
       ) : currentScreen === "signin" ? (
         <SignIn
           onNavigateToSignUp={() => setCurrentScreen("signup")}
+          onNavigateToForgotPassword={() => {
+            setCurrentScreen("forgot");
+          }}
           onNavigateToSplash={() => {
             setSplashNextScreen("dashboard");
             setCurrentScreen("splash");
+          }}
+        />
+      ) : currentScreen === "forgot" ? (
+        <ForgotPassword
+          onBack={() => setCurrentScreen("signin")}
+          onSend={(email) => {
+            setVerifyEmail(email);
+            setVerifyFlow("recovery");
+            setCurrentScreen("verify");
           }}
         />
       ) : currentScreen === "signup" ? (
@@ -44,6 +60,7 @@ export default function App() {
           onNavigateToSignIn={() => setCurrentScreen("signin")}
           onNavigateToVerify={(email) => {
             setVerifyEmail(email);
+            setVerifyFlow("signup");
             setCurrentScreen("verify");
           }}
           onBack={() => setCurrentScreen("signin")}
@@ -51,6 +68,7 @@ export default function App() {
       ) : currentScreen === "verify" ? (
         <Verify
           email={verifyEmail}
+          mode={verifyFlow}
           onNavigateToSignIn={() => setCurrentScreen("signin")}
           onNavigateToHome={() => {
             setCurrentScreen("dashboard");

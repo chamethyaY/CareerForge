@@ -18,9 +18,11 @@ import {
 export function SignIn({
   onNavigateToSignUp,
   onNavigateToSplash,
+  onNavigateToForgotPassword,
 }: {
   onNavigateToSignUp?: () => void;
   onNavigateToSplash?: () => void;
+  onNavigateToForgotPassword?: () => void;
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,6 +51,50 @@ export function SignIn({
       }
 
       onNavigateToSplash?.();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    Keyboard.dismiss();
+
+    if (!email.trim()) {
+      Alert.alert("Email required", "Please enter your email address first.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim().toLowerCase(),
+        options: {
+          shouldCreateUser: false,
+        },
+      });
+
+      // eslint-disable-next-line no-console
+      console.log(
+        "signInWithOtp called for password recovery:",
+        email.trim().toLowerCase(),
+      );
+
+      if (error) {
+        Alert.alert(
+          "Request failed",
+          error.message || "Unable to send code right now.",
+        );
+        return;
+      }
+
+      Alert.alert(
+        "Check your email",
+        "We've sent a 6-digit code to " +
+          email.trim().toLowerCase() +
+          ". Enter it on the next screen.",
+      );
+
+      onNavigateToForgotPassword?.();
     } finally {
       setLoading(false);
     }
@@ -151,7 +197,10 @@ export function SignIn({
                 { width: Math.min(520, screenWidth - 48) },
               ]}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => onNavigateToForgotPassword?.()}
+                disabled={loading}
+              >
                 <Text style={styles.forgotPassword}>Forgot password?</Text>
               </TouchableOpacity>
             </View>
