@@ -1,34 +1,151 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useState } from "react";
 
 type DashboardProps = {
   onSignOut?: () => void;
+  onContinue?: (goal: string) => void;
 };
 
-export function Dashboard({ onSignOut }: DashboardProps) {
+type Goal = "internship" | "skills" | "switch";
+
+const GOALS = [
+  {
+    id: "internship" as Goal,
+    title: "Land an Internship",
+    subtitle: "Get ready for your first role",
+    icon: "briefcase",
+  },
+  {
+    id: "skills" as Goal,
+    title: "Build My Skills",
+    subtitle: "Level up as a developer",
+    icon: "flash",
+  },
+  {
+    id: "switch" as Goal,
+    title: "Career Switch",
+    subtitle: "Transition into tech",
+    icon: "time",
+  },
+];
+
+export function Dashboard({ onSignOut, onContinue }: DashboardProps) {
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+
+  const handleContinue = () => {
+    if (selectedGoal && onContinue) {
+      onContinue(selectedGoal);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.topIconWrap}>
-          <LinearGradient
-            colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.iconGradient}
-          >
-            <Ionicons name="home-outline" size={34} color="#FFFFFF" />
-          </LinearGradient>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <View style={styles.header}>
+        <LinearGradient
+          colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.headerIcon}
+        >
+          <Ionicons name="sparkles" size={20} color="#FFFFFF" />
+        </LinearGradient>
+        <View style={styles.headerText}>
+          <Text style={styles.headerTitle}>ForgeAI</Text>
+          <Text style={styles.headerSubtitle}>Your career assistant</Text>
         </View>
-
-        <Text style={styles.heading}>Dashboard</Text>
-        <Text style={styles.subtitle}>Your account is verified and ready to use.</Text>
-
-        <TouchableOpacity onPress={onSignOut} activeOpacity={0.8} style={styles.signOutBtn}>
-          <Text style={styles.signOutText}>Sign Out</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+
+      {/* Greeting Message */}
+      <View style={styles.greetingContainer}>
+        <Text style={styles.greetingText}>
+          Hey there! 👋 I'm excited to help you on your career journey. Let's
+          start by understanding your goals.
+        </Text>
+      </View>
+
+      {/* Goals Section */}
+      <View style={styles.goalsSection}>
+        <Text style={styles.sectionTitle}>What's your primary goal?</Text>
+        <View style={styles.goalsContainer}>
+          {GOALS.map((goal) => (
+            <TouchableOpacity
+              key={goal.id}
+              activeOpacity={0.8}
+              onPress={() => setSelectedGoal(goal.id)}
+              style={[
+                styles.goalCard,
+                selectedGoal === goal.id && styles.goalCardActive,
+              ]}
+            >
+              <LinearGradient
+                colors={
+                  goal.id === "internship"
+                    ? ["#8B5CF6", "#7C3AED"]
+                    : goal.id === "skills"
+                      ? ["#06B6D4", "#0891B2"]
+                      : ["#A855F7", "#9333EA"]
+                }
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.goalIconGradient}
+              >
+                <Ionicons name={goal.icon as any} size={28} color="#FFFFFF" />
+              </LinearGradient>
+              <View style={styles.goalTextContainer}>
+                <Text style={styles.goalTitle}>{goal.title}</Text>
+                <Text style={styles.goalSubtitle}>{goal.subtitle}</Text>
+              </View>
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      {/* Continue Button */}
+      <LinearGradient
+        colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[
+          styles.continueBtn,
+          !selectedGoal && styles.continueBtnDisabled,
+        ]}
+      >
+        <TouchableOpacity
+          onPress={handleContinue}
+          disabled={!selectedGoal}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.continueBtnText}>Continue</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+
+      {/* Sign Out Button */}
+      <TouchableOpacity
+        onPress={onSignOut}
+        activeOpacity={0.8}
+        style={styles.signOutBtn}
+      >
+        <Text style={styles.signOutText}>Sign Out</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
 
@@ -36,37 +153,114 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0A0E27",
+  },
+  scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 36,
-    paddingBottom: 24,
+    paddingTop: 34,
+    paddingBottom: 40,
   },
-  content: {
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 36,
+    marginBottom: 32,
+    gap: 12,
+  },
+  headerIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  topIconWrap: {
-    marginBottom: 26,
-  },
-  iconGradient: {
-    width: 84,
-    height: 84,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  heading: {
-    fontSize: 32,
+  headerTitle: {
+    fontSize: 20,
     fontWeight: "800",
     color: "#FFFFFF",
-    marginBottom: 10,
   },
-  subtitle: {
+  headerSubtitle: {
+    fontSize: 12,
+    color: "rgba(255, 255, 255, 0.6)",
+    marginTop: 2,
+  },
+  greetingContainer: {
+    backgroundColor: "rgba(255, 255, 255, 0.04)",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 32,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.08)",
+  },
+  greetingText: {
     fontSize: 16,
-    color: "rgba(255, 255, 255, 0.7)",
-    textAlign: "center",
-    marginBottom: 28,
-    maxWidth: 320,
+    color: "#FFFFFF",
+    lineHeight: 24,
+    fontWeight: "500",
+  },
+  goalsSection: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    marginBottom: 16,
+  },
+  goalsContainer: {
+    gap: 12,
+  },
+  goalCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.04)",
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.08)",
+    gap: 12,
+  },
+  goalCardActive: {
+    backgroundColor: "rgba(139, 92, 246, 0.1)",
+    borderColor: "rgba(139, 92, 246, 0.4)",
+  },
+  goalIconGradient: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
+  goalTextContainer: {
+    flex: 1,
+  },
+  goalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+  goalSubtitle: {
+    fontSize: 13,
+    color: "rgba(255, 255, 255, 0.6)",
+  },
+  continueBtn: {
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  continueBtnDisabled: {
+    opacity: 0.5,
+  },
+  continueBtnText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
   signOutBtn: {
     borderWidth: 1,
@@ -75,6 +269,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     backgroundColor: "rgba(255,255,255,0.04)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   signOutText: {
     color: "#FFFFFF",
