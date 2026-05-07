@@ -40,9 +40,7 @@ export function SignUp({
 
   const screenWidth = Dimensions.get("window").width;
   const isDuplicateEmailError = (message?: string) =>
-    /already\s+registered|already\s+exists|user\s+already/i.test(
-      message ?? "",
-    );
+    /already\s+registered|already\s+exists|user\s+already/i.test(message ?? "");
 
   const handleSignUp = async () => {
     Keyboard.dismiss();
@@ -54,12 +52,18 @@ export function SignUp({
     }
 
     if (createPassword !== confirmPassword) {
-      Alert.alert("Password mismatch", "Create password and confirm password must match.");
+      Alert.alert(
+        "Password mismatch",
+        "Create password and confirm password must match.",
+      );
       return;
     }
 
     if (createPassword.length < 6) {
-      Alert.alert("Weak password", "Password must be at least 6 characters long.");
+      Alert.alert(
+        "Weak password",
+        "Password must be at least 6 characters long.",
+      );
       return;
     }
 
@@ -89,10 +93,7 @@ export function SignUp({
           return;
         }
         if (isDuplicateEmailError(signError.message)) {
-          Alert.alert(
-            "Sign up failed",
-            "There is a user with the same email.",
-          );
+          Alert.alert("Sign up failed", "There is a user with the same email.");
           return;
         }
         setError(signError.message || "Sign up failed.");
@@ -116,7 +117,10 @@ export function SignUp({
 
   useEffect(() => {
     if (!signupCooldown) return;
-    const timer = setInterval(() => setSignupCooldown((c) => Math.max(0, c - 1)), 1000);
+    const timer = setInterval(
+      () => setSignupCooldown((c) => Math.max(0, c - 1)),
+      1000,
+    );
     return () => clearInterval(timer);
   }, [signupCooldown]);
 
@@ -126,120 +130,192 @@ export function SignUp({
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <TouchableOpacity onPress={() => onBack?.()} style={styles.backButton} accessibilityLabel="Back">
+        <TouchableOpacity
+          onPress={() => onBack?.()}
+          style={styles.backButton}
+          accessibilityLabel="Back"
+        >
           <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
         </TouchableOpacity>
-      <View style={styles.content}>
-        <View style={styles.topIconWrap}>
-          <View style={styles.iconShadow} />
-          <LinearGradient
-            colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.iconGradient}
-          >
-            <Ionicons name="star-outline" size={36} color="#FFFFFF" />
-          </LinearGradient>
-        </View>
-
-        <View style={styles.form}>
-          <Text style={styles.heading}>Create Account</Text>
-          <Text style={styles.subtitle}>Sign up to start your journey</Text>
-
-          <View style={[styles.inputContainer, { width: Math.min(520, screenWidth - 48) }]}>
-            <Ionicons name="person-outline" size={20} color="rgba(255,255,255,0.5)" style={styles.inputIcon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Full name"
-              placeholderTextColor="rgba(255,255,255,0.5)"
-              value={fullName}
-              onChangeText={setFullName}
-              autoCapitalize="words"
-              returnKeyType="next"
-              onSubmitEditing={() => emailInputRef.current?.focus()}
-              blurOnSubmit={false}
-            />
-          </View>
-
-          <View style={[styles.inputContainer, { width: Math.min(520, screenWidth - 48) }]}>
-            <Ionicons name="mail-outline" size={20} color="rgba(255,255,255,0.5)" style={styles.inputIcon} />
-            <TextInput
-              ref={emailInputRef}
-              style={styles.input}
-              placeholder="Email address"
-              placeholderTextColor="rgba(255,255,255,0.5)"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              returnKeyType="next"
-              onSubmitEditing={() => createPasswordInputRef.current?.focus()}
-              blurOnSubmit={false}
-            />
-          </View>
-
-          <View style={[styles.inputContainer, { width: Math.min(520, screenWidth - 48) }]}>
-            <Ionicons name="lock-closed-outline" size={20} color="rgba(255,255,255,0.5)" style={styles.inputIcon} />
-            <TextInput
-              ref={createPasswordInputRef}
-              style={styles.input}
-              placeholder="Create password"
-              placeholderTextColor="rgba(255,255,255,0.5)"
-              value={createPassword}
-              onChangeText={setCreatePassword}
-              secureTextEntry={!showCreatePassword}
-              returnKeyType="next"
-              onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
-              blurOnSubmit={false}
-            />
-            <TouchableOpacity onPress={() => setShowCreatePassword(!showCreatePassword)} style={styles.eyeIcon}>
-              <Ionicons name={showCreatePassword ? "eye-outline" : "eye-off-outline"} size={20} color="rgba(255,255,255,0.5)" />
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.inputContainer, { width: Math.min(520, screenWidth - 48) }]}>
-            <Ionicons name="lock-closed-outline" size={20} color="rgba(255,255,255,0.5)" style={styles.inputIcon} />
-            <TextInput
-              ref={confirmPasswordInputRef}
-              style={styles.input}
-              placeholder="Confirm password"
-              placeholderTextColor="rgba(255,255,255,0.5)"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={!showConfirmPassword}
-              returnKeyType="done"
-              onSubmitEditing={handleSignUp}
-            />
-            <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeIcon}>
-              <Ionicons name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} size={20} color="rgba(255,255,255,0.5)" />
-            </TouchableOpacity>
-          </View>
-
-          
-
-          {error ? <Text style={{ color: "#FF6B6B", marginBottom: 8 }}>{error}</Text> : null}
-          {signupCooldown ? (
-            <Text style={{ color: "#FF6B6B", marginBottom: 8 }}>
-              Please wait {signupCooldown}s before trying again.
-            </Text>
-          ) : null}
-
-          <TouchableOpacity activeOpacity={0.9} onPress={handleSignUp} disabled={loading || signupCooldown > 0}>
-            <LinearGradient colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[styles.signInButton, { width: Math.min(520, screenWidth - 48) }]}>
-              <Text style={styles.signInButtonText}>{loading ? "Creating..." : "Sign Up"}</Text>
+        <View style={styles.content}>
+          <View style={styles.topIconWrap}>
+            <View style={styles.iconShadow} />
+            <LinearGradient
+              colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.iconGradient}
+            >
+              <Ionicons name="star-outline" size={36} color="#FFFFFF" />
             </LinearGradient>
-          </TouchableOpacity>
+          </View>
 
+          <View style={styles.form}>
+            <Text style={styles.heading}>Create Account</Text>
+            <Text style={styles.subtitle}>Sign up to start your journey</Text>
 
+            <View
+              style={[
+                styles.inputContainer,
+                { width: Math.min(520, screenWidth - 48) },
+              ]}
+            >
+              <Ionicons
+                name="person-outline"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Full name"
+                placeholderTextColor="rgba(255,255,255,0.5)"
+                value={fullName}
+                onChangeText={setFullName}
+                autoCapitalize="words"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+                blurOnSubmit={false}
+              />
+            </View>
+
+            <View
+              style={[
+                styles.inputContainer,
+                { width: Math.min(520, screenWidth - 48) },
+              ]}
+            >
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                ref={emailInputRef}
+                style={styles.input}
+                placeholder="Email address"
+                placeholderTextColor="rgba(255,255,255,0.5)"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                returnKeyType="next"
+                onSubmitEditing={() => createPasswordInputRef.current?.focus()}
+                blurOnSubmit={false}
+              />
+            </View>
+
+            <View
+              style={[
+                styles.inputContainer,
+                { width: Math.min(520, screenWidth - 48) },
+              ]}
+            >
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                ref={createPasswordInputRef}
+                style={styles.input}
+                placeholder="Create password"
+                placeholderTextColor="rgba(255,255,255,0.5)"
+                value={createPassword}
+                onChangeText={setCreatePassword}
+                secureTextEntry={!showCreatePassword}
+                returnKeyType="next"
+                onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
+                blurOnSubmit={false}
+              />
+              <TouchableOpacity
+                onPress={() => setShowCreatePassword(!showCreatePassword)}
+                style={styles.eyeIcon}
+              >
+                <Ionicons
+                  name={showCreatePassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color="rgba(255,255,255,0.5)"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={[
+                styles.inputContainer,
+                { width: Math.min(520, screenWidth - 48) },
+              ]}
+            >
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color="rgba(255,255,255,0.5)"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                ref={confirmPasswordInputRef}
+                style={styles.input}
+                placeholder="Confirm password"
+                placeholderTextColor="rgba(255,255,255,0.5)"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+                returnKeyType="done"
+                onSubmitEditing={handleSignUp}
+              />
+              <TouchableOpacity
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={styles.eyeIcon}
+              >
+                <Ionicons
+                  name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color="rgba(255,255,255,0.5)"
+                />
+              </TouchableOpacity>
+            </View>
+
+            {error ? (
+              <Text style={{ color: "#FF6B6B", marginBottom: 8 }}>{error}</Text>
+            ) : null}
+            {signupCooldown ? (
+              <Text style={{ color: "#FF6B6B", marginBottom: 8 }}>
+                Please wait {signupCooldown}s before trying again.
+              </Text>
+            ) : null}
+
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={handleSignUp}
+              disabled={loading || signupCooldown > 0}
+            >
+              <LinearGradient
+                colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[
+                  styles.signInButton,
+                  { width: Math.min(520, screenWidth - 48) },
+                ]}
+              >
+                <Text style={styles.signInButtonText}>
+                  {loading ? "Creating..." : "Sign Up"}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.signUpContainer}>
+            <Text style={styles.signUpText}>Already have an account? </Text>
+            <TouchableOpacity
+              onPress={() => onNavigateToSignIn && onNavigateToSignIn()}
+            >
+              <Text style={styles.signUpLink}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <View style={styles.signUpContainer}>
-          <Text style={styles.signUpText}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => onNavigateToSignIn && onNavigateToSignIn()}>
-            <Text style={styles.signUpLink}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

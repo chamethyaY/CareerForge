@@ -21,19 +21,25 @@ const GOALS = [
     id: "internship" as Goal,
     title: "Land an Internship",
     subtitle: "Get ready for your first role",
-    icon: "briefcase",
+    icon: "briefcase-outline",
+    iconColor: "#7B6CF6",
+    iconBg: "rgba(123, 108, 246, 0.18)",
   },
   {
     id: "skills" as Goal,
     title: "Build My Skills",
     subtitle: "Level up as a developer",
-    icon: "flash",
+    icon: "flash-outline",
+    iconColor: "#2EC6C6",
+    iconBg: "rgba(46, 198, 198, 0.18)",
   },
   {
     id: "switch" as Goal,
     title: "Career Switch",
     subtitle: "Transition into tech",
-    icon: "time",
+    icon: "time-outline",
+    iconColor: "#C86DD7",
+    iconBg: "rgba(200, 109, 215, 0.18)",
   },
 ];
 
@@ -90,20 +96,18 @@ export function Dashboard({ onSignOut, onContinue }: DashboardProps) {
                 selectedGoal === goal.id && styles.goalCardActive,
               ]}
             >
-              <LinearGradient
-                colors={
-                  goal.id === "internship"
-                    ? ["#8B5CF6", "#7C3AED"]
-                    : goal.id === "skills"
-                      ? ["#06B6D4", "#0891B2"]
-                      : ["#A855F7", "#9333EA"]
-                }
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.goalIconGradient}
+              <View
+                style={[
+                  styles.goalIconGradient,
+                  { backgroundColor: goal.iconBg },
+                ]}
               >
-                <Ionicons name={goal.icon as any} size={28} color="#FFFFFF" />
-              </LinearGradient>
+                <Ionicons
+                  name={goal.icon as any}
+                  size={24}
+                  color={goal.iconColor}
+                />
+              </View>
               <View style={styles.goalTextContainer}>
                 <Text style={styles.goalTitle}>{goal.title}</Text>
                 <Text style={styles.goalSubtitle}>{goal.subtitle}</Text>
@@ -227,12 +231,14 @@ const styles = StyleSheet.create({
     borderColor: "rgba(139, 92, 246, 0.4)",
   },
   goalIconGradient: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
+    width: 46,
+    height: 46,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.08)",
   },
   goalTextContainer: {
     flex: 1,

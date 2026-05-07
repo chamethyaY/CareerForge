@@ -224,8 +224,6 @@ export function SignIn({
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
-
-
           </View>
 
           <View style={styles.signUpContainer}>
