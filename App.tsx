@@ -39,7 +39,9 @@ export default function App() {
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
   const [splashNextScreen, setSplashNextScreen] = useState<
-    "signin" | "goal"
+    | "signin"
+    | "goal"
+    | "dashboard"
   >("signin");
   const [goal, setGoal] = useState<string | null>(null);
   const [level, setLevel] = useState<string | null>(null);
@@ -169,7 +171,7 @@ export default function App() {
             setCurrentScreen("forgot");
           }}
           onNavigateToSplash={() => {
-            setSplashNextScreen("goal");
+            setSplashNextScreen("dashboard");
             setCurrentScreen("splash");
           }}
         />
@@ -199,7 +201,8 @@ export default function App() {
           onNavigateToSignIn={() => setCurrentScreen("signin")}
           onNavigateToReset={() => setCurrentScreen("reset")}
           onNavigateToHome={() => {
-            goToDashboardOrMain();
+            if (verifyFlow === "signup") setCurrentScreen("goal");
+            else goToDashboardOrMain();
           }}
         />
       ) : currentScreen === "reset" ? (
