@@ -9,49 +9,76 @@ import {
   View,
 } from "react-native";
 
-type Level = "beginner" | "intermediate" | "advanced";
+type Role = "frontend" | "backend" | "mobile" | "fullstack" | "devops" | "ai";
 
-type CurrentLevelProps = {
+type SelectRolesProps = {
   onBackToDashboard?: () => void;
-  onContinue?: (level: Level) => void;
+  onContinue?: (roles: Role[]) => void;
 };
 
-const LEVELS = [
+const ROLES = [
   {
-    id: "beginner" as Level,
-    title: "Beginner",
-    subtitle: "Just starting out",
-    icon: "leaf-outline",
-    iconColor: "#34D399",
-    iconBg: "rgba(16, 185, 129, 0.14)",
+    id: "frontend" as Role,
+    title: "Frontend",
+    subtitle: "React, UI, design",
+    icon: "code-outline",
+    iconColor: "#3B82F6",
+    iconBg: "rgba(59, 130, 246, 0.14)",
   },
   {
-    id: "intermediate" as Level,
-    title: "Intermediate",
-    subtitle: "Know the basics, want more",
-    icon: "trending-up-outline",
-    iconColor: "#818CF8",
-    iconBg: "rgba(99, 102, 241, 0.14)",
+    id: "backend" as Role,
+    title: "Backend",
+    subtitle: "APIs, databases",
+    icon: "server-outline",
+    iconColor: "#06B6D4",
+    iconBg: "rgba(6, 182, 212, 0.14)",
   },
   {
-    id: "advanced" as Level,
-    title: "Advanced",
-    subtitle: "Ready to go deep",
-    icon: "rocket-outline",
+    id: "mobile" as Role,
+    title: "Mobile",
+    subtitle: "iOS, Android",
+    icon: "phone-portrait-outline",
+    iconColor: "#8B5CF6",
+    iconBg: "rgba(139, 92, 246, 0.14)",
+  },
+  {
+    id: "fullstack" as Role,
+    title: "Full Stack",
+    subtitle: "End-to-end",
+    icon: "layers-outline",
+    iconColor: "#EC4899",
+    iconBg: "rgba(236, 72, 153, 0.14)",
+  },
+  {
+    id: "devops" as Role,
+    title: "DevOps",
+    subtitle: "CI/CD, Cloud",
+    icon: "settings-outline",
     iconColor: "#F97316",
     iconBg: "rgba(249, 115, 22, 0.14)",
   },
+  {
+    id: "ai" as Role,
+    title: "AI / ML",
+    subtitle: "Models, LLMs",
+    icon: "sparkles-outline",
+    iconColor: "#14B8A6",
+    iconBg: "rgba(20, 184, 166, 0.14)",
+  },
 ];
 
-export function CurrentLevel({
-  onBackToDashboard,
-  onContinue,
-}: CurrentLevelProps) {
-  const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
+export function SelectRoles({ onBackToDashboard, onContinue }: SelectRolesProps) {
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
+
+  const toggleRole = (role: Role) => {
+    setSelectedRoles((prev) =>
+      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
+    );
+  };
 
   const handleContinue = () => {
-    if (selectedLevel) {
-      onContinue?.(selectedLevel);
+    if (selectedRoles.length > 0) {
+      onContinue?.(selectedRoles);
     }
   };
 
@@ -79,48 +106,46 @@ export function CurrentLevel({
         </View>
 
         <Text style={styles.message}>
-          Now let me understand where you are right now so I can set the right
-          pace.
+          Which role excites you most? Pick all that apply — I'll tailor your
+          projects to match.
         </Text>
       </View>
 
-      <Text style={styles.title}>What's your current level?</Text>
-      <Text style={styles.subtitle}>This shapes your skill roadmap</Text>
+      <Text style={styles.title}>What role interests you?</Text>
+      <Text style={styles.subtitle}>Pick all that apply</Text>
 
-      <View style={styles.options}>
-        {LEVELS.map((level) => {
-          const isSelected = selectedLevel === level.id;
+      <View style={styles.rolesGrid}>
+        {ROLES.map((role) => {
+          const isSelected = selectedRoles.includes(role.id);
 
           return (
             <TouchableOpacity
-              key={level.id}
+              key={role.id}
               activeOpacity={0.85}
-              onPress={() => setSelectedLevel(level.id)}
+              onPress={() => toggleRole(role.id)}
               style={[
-                styles.optionCard,
-                isSelected && styles.optionCardSelected,
+                styles.roleCard,
+                isSelected && styles.roleCardSelected,
               ]}
             >
               <View
-                style={[styles.optionIcon, { backgroundColor: level.iconBg }]}
+                style={[styles.roleIcon, { backgroundColor: role.iconBg }]}
               >
                 <Ionicons
-                  name={level.icon as any}
-                  size={22}
-                  color={level.iconColor}
+                  name={role.icon as any}
+                  size={24}
+                  color={role.iconColor}
                 />
               </View>
 
-              <View style={styles.optionTextWrap}>
-                <Text style={styles.optionTitle}>{level.title}</Text>
-                <Text style={styles.optionSubtitle}>{level.subtitle}</Text>
-              </View>
+              <Text style={styles.roleTitle}>{role.title}</Text>
+              <Text style={styles.roleSubtitle}>{role.subtitle}</Text>
 
-              <View style={[styles.radio, isSelected && styles.radioSelected]}>
-                {isSelected ? (
-                  <Ionicons name="checkmark" size={14} color="#FFFFFF" />
-                ) : null}
-              </View>
+              {isSelected && (
+                <View style={styles.checkmark}>
+                  <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                </View>
+              )}
             </TouchableOpacity>
           );
         })}
@@ -132,12 +157,12 @@ export function CurrentLevel({
         end={{ x: 1, y: 1 }}
         style={[
           styles.continueBtn,
-          !selectedLevel && styles.continueBtnDisabled,
+          selectedRoles.length === 0 && styles.continueBtnDisabled,
         ]}
       >
         <TouchableOpacity
           activeOpacity={0.85}
-          disabled={!selectedLevel}
+          disabled={selectedRoles.length === 0}
           onPress={handleContinue}
         >
           <Text style={styles.continueBtnText}>Continue</Text>
@@ -216,60 +241,56 @@ const styles = StyleSheet.create({
     marginTop: 6,
     marginBottom: 16,
   },
-  options: {
+  rolesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 12,
     marginBottom: 28,
   },
-  optionCard: {
-    flexDirection: "row",
-    alignItems: "center",
+  roleCard: {
+    width: "48%",
     backgroundColor: "rgba(255, 255, 255, 0.04)",
     borderRadius: 16,
-    padding: 16,
     borderWidth: 2,
     borderColor: "rgba(255, 255, 255, 0.08)",
-    gap: 12,
+    padding: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 120,
   },
-  optionCardSelected: {
+  roleCardSelected: {
     backgroundColor: "rgba(139, 92, 246, 0.1)",
     borderColor: "rgba(139, 92, 246, 0.4)",
   },
-  optionIcon: {
+  roleIcon: {
     width: 46,
     height: 46,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
-    flexShrink: 0,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.08)",
+    marginBottom: 10,
   },
-  optionTextWrap: {
-    flex: 1,
-  },
-  optionTitle: {
+  roleTitle: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "700",
+    marginBottom: 4,
   },
-  optionSubtitle: {
+  roleSubtitle: {
     color: "rgba(255, 255, 255, 0.6)",
-    fontSize: 13,
-    marginTop: 4,
+    fontSize: 12,
+    textAlign: "center",
   },
-  radio: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.12)",
-    backgroundColor: "rgba(255, 255, 255, 0.02)",
+  checkmark: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    backgroundColor: "rgba(139, 92, 246, 0.95)",
     alignItems: "center",
     justifyContent: "center",
-  },
-  radioSelected: {
-    borderColor: "rgba(139, 92, 246, 0.85)",
-    backgroundColor: "rgba(139, 92, 246, 0.95)",
   },
   continueBtn: {
     borderRadius: 12,
