@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SignIn } from "./src/screens/signIn";
 import { SignUp } from "./src/screens/SignUp";
@@ -12,6 +12,7 @@ import { Dashboard } from "./src/screens/Dashboard";
 import { CurrentLevel } from "./src/screens/CurrentLevel";
 import { SelectRoles } from "./src/screens/SelectRoles";
 import { Commitment } from "./src/screens/Commitment";
+import { supabase } from "./src/services/supabase";
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -38,6 +39,46 @@ export default function App() {
   const [splashNextScreen, setSplashNextScreen] = useState<
     "signin" | "dashboard"
   >("signin");
+  const [goal, setGoal] = useState<string | null>(null);
+  const [level, setLevel] = useState<string | null>(null);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [timeCommitment, setTimeCommitment] = useState<string | null>(null);
+
+  const saveOnboarding = async (nextValues: {
+    goal?: string | null;
+    level?: string | null;
+    roles?: string[];
+    timeCommitment?: string | null;
+  } = {}) => {
+    const { data } = await supabase.auth.getUser();
+    const user = data.user;
+
+    if (!user) {
+      throw new Error("No authenticated user found.");
+    }
+
+    const payload: Record<string, unknown> = {
+      id: user.id,
+    };
+
+    const resolvedGoal = nextValues.goal ?? goal;
+    const resolvedLevel = nextValues.level ?? level;
+    const resolvedRoles = nextValues.roles ?? roles;
+    const resolvedTimeCommitment = nextValues.timeCommitment ?? timeCommitment;
+
+    if (resolvedGoal !== null) payload.goal = resolvedGoal;
+    if (resolvedLevel !== null) payload.level = resolvedLevel;
+    if (resolvedRoles.length > 0) payload.roles = resolvedRoles;
+    if (resolvedTimeCommitment !== null) payload.time_commitment = resolvedTimeCommitment;
+
+    const { error } = await supabase
+      .from("user_profiles")
+      .upsert(payload, { onConflict: "id" });
+
+    if (error) {
+      throw error;
+    }
+  };
 
   const handleSplashComplete = () => {
     setCurrentScreen(splashNextScreen);
@@ -97,19 +138,65 @@ export default function App() {
       ) : currentScreen === "level" ? (
         <CurrentLevel
           onBackToDashboard={() => setCurrentScreen("dashboard")}
-          onContinue={() => setCurrentScreen("roles")}
+          onContinue={async (selectedLevel) => {
+            setLevel(selectedLevel);
+
+            try {
+              await saveOnboarding({ level: selectedLevel });
+              setCurrentScreen("roles");
+            } catch (error) {
+              console.error("Failed to save level:", error);
+              Alert.alert("Save failed", "Could not save your current level.");
+            }
+          }}
         />
       ) : currentScreen === "roles" ? (
         <SelectRoles
           onBackToDashboard={() => setCurrentScreen("dashboard")}
-          onContinue={() => setCurrentScreen("commitment")}
+          onContinue={async (selectedRoles) => {
+            setRoles(selectedRoles);
+
+            try {
+              await saveOnboarding({ roles: selectedRoles });
+              setCurrentScreen("commitment");
+            } catch (error) {
+              console.error("Failed to save roles:", error);
+              Alert.alert("Save failed", "Could not save your role selection.");
+            }
+          }}
         />
       ) : currentScreen === "commitment" ? (
-        <Commitment onBackToDashboard={() => setCurrentScreen("dashboard")} />
+        <Commitment
+          onBackToDashboard={() => setCurrentScreen("dashboard")}
+          onContinue={async (selectedCommitment) => {
+            setTimeCommitment(selectedCommitment);
+
+            try {
+              await saveOnboarding({ timeCommitment: selectedCommitment });
+              setCurrentScreen("dashboard");
+            } catch (error) {
+              console.error("Failed to save onboarding:", error);
+              Alert.alert(
+                "Save failed",
+                "Could not save your commitment level.",
+              );
+            }
+          }}
+        />
       ) : (
         <Dashboard
           onSignOut={() => setCurrentScreen("signin")}
-          onContinue={() => setCurrentScreen("level")}
+          onContinue={async (selectedGoal) => {
+            setGoal(selectedGoal);
+
+            try {
+              await saveOnboarding({ goal: selectedGoal });
+              setCurrentScreen("level");
+            } catch (error) {
+              console.error("Failed to save goal:", error);
+              Alert.alert("Save failed", "Could not save your primary goal.");
+            }
+          }}
         />
       )}
     </SafeAreaView>

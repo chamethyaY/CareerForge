@@ -67,12 +67,15 @@ const ROLES = [
   },
 ];
 
-export function SelectRoles({ onBackToDashboard, onContinue }: SelectRolesProps) {
+export function SelectRoles({
+  onBackToDashboard,
+  onContinue,
+}: SelectRolesProps) {
   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
 
   const toggleRole = (role: Role) => {
     setSelectedRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
+      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role],
     );
   };
 
@@ -123,14 +126,9 @@ export function SelectRoles({ onBackToDashboard, onContinue }: SelectRolesProps)
               key={role.id}
               activeOpacity={0.85}
               onPress={() => toggleRole(role.id)}
-              style={[
-                styles.roleCard,
-                isSelected && styles.roleCardSelected,
-              ]}
+              style={[styles.roleCard, isSelected && styles.roleCardSelected]}
             >
-              <View
-                style={[styles.roleIcon, { backgroundColor: role.iconBg }]}
-              >
+              <View style={[styles.roleIcon, { backgroundColor: role.iconBg }]}>
                 <Ionicons
                   name={role.icon as any}
                   size={24}
