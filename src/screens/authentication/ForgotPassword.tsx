@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
-import { supabase } from "../services/supabase";
+import { supabase } from "../../services/supabase";
 import {
   Alert,
   Keyboard,

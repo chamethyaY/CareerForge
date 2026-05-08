@@ -56,106 +56,120 @@ export function CurrentLevel({
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.headerCard}>
-        <View style={styles.headerRow}>
-          <LinearGradient
-            colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.headerIcon}
+    <View style={styles.screenContainer}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.topActionRow}>
+          <TouchableOpacity
+            style={styles.topActionBtn}
+            onPress={onBackToDashboard}
+            activeOpacity={0.8}
           >
-            <Ionicons name="sparkles" size={18} color="#FFFFFF" />
-          </LinearGradient>
-
-          <View>
-            <Text style={styles.headerTitle}>Forge AI</Text>
-            <Text style={styles.headerSubtitle}>Your career assistant</Text>
-          </View>
+            <Ionicons
+              name="chevron-back"
+              size={20}
+              color="rgba(255,255,255,0.7)"
+            />
+          </TouchableOpacity>
         </View>
 
-        <Text style={styles.message}>
-          Now let me understand where you are right now so I can set the right
-          pace.
-        </Text>
-      </View>
-
-      <Text style={styles.title}>What's your current level?</Text>
-      <Text style={styles.subtitle}>This shapes your skill roadmap</Text>
-
-      <View style={styles.options}>
-        {LEVELS.map((level) => {
-          const isSelected = selectedLevel === level.id;
-
-          return (
-            <TouchableOpacity
-              key={level.id}
-              activeOpacity={0.85}
-              onPress={() => setSelectedLevel(level.id)}
-              style={[
-                styles.optionCard,
-                isSelected && styles.optionCardSelected,
-              ]}
+        <View style={styles.headerCard}>
+          <View style={styles.headerRow}>
+            <LinearGradient
+              colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.headerIcon}
             >
-              <View
-                style={[styles.optionIcon, { backgroundColor: level.iconBg }]}
+              <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+            </LinearGradient>
+
+            <View>
+              <Text style={styles.headerTitle}>Forge AI</Text>
+              <Text style={styles.headerSubtitle}>Your career assistant</Text>
+            </View>
+          </View>
+
+          <Text style={styles.message}>
+            Now let me understand where you are right now so I can set the right
+            pace.
+          </Text>
+        </View>
+
+        <Text style={styles.title}>What's your current level?</Text>
+        <Text style={styles.subtitle}>This shapes your skill roadmap</Text>
+
+        <View style={styles.options}>
+          {LEVELS.map((level) => {
+            const isSelected = selectedLevel === level.id;
+
+            return (
+              <TouchableOpacity
+                key={level.id}
+                activeOpacity={0.85}
+                onPress={() => setSelectedLevel(level.id)}
+                style={[
+                  styles.optionCard,
+                  isSelected && styles.optionCardSelected,
+                ]}
               >
-                <Ionicons
-                  name={level.icon as any}
-                  size={22}
-                  color={level.iconColor}
-                />
-              </View>
+                <View
+                  style={[styles.optionIcon, { backgroundColor: level.iconBg }]}
+                >
+                  <Ionicons
+                    name={level.icon as any}
+                    size={22}
+                    color={level.iconColor}
+                  />
+                </View>
 
-              <View style={styles.optionTextWrap}>
-                <Text style={styles.optionTitle}>{level.title}</Text>
-                <Text style={styles.optionSubtitle}>{level.subtitle}</Text>
-              </View>
+                <View style={styles.optionTextWrap}>
+                  <Text style={styles.optionTitle}>{level.title}</Text>
+                  <Text style={styles.optionSubtitle}>{level.subtitle}</Text>
+                </View>
 
-              <View style={[styles.radio, isSelected && styles.radioSelected]}>
-                {isSelected ? (
-                  <Ionicons name="checkmark" size={14} color="#FFFFFF" />
-                ) : null}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+                <View
+                  style={[styles.radio, isSelected && styles.radioSelected]}
+                >
+                  {isSelected ? (
+                    <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                  ) : null}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
 
-      <LinearGradient
-        colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[
-          styles.continueBtn,
-          !selectedLevel && styles.continueBtnDisabled,
-        ]}
-      >
-        <TouchableOpacity
-          activeOpacity={0.85}
-          disabled={!selectedLevel}
-          onPress={handleContinue}
+        <LinearGradient
+          colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[
+            styles.continueBtn,
+            !selectedLevel && styles.continueBtnDisabled,
+          ]}
         >
-          <Text style={styles.continueBtnText}>Continue</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onBackToDashboard}
-        style={styles.backLink}
-      >
-        <Text style={styles.backLinkText}>Back to dashboard</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            disabled={!selectedLevel}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueBtnText}>Continue</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#0A0E27",
+  },
   container: {
     flex: 1,
     backgroundColor: "#0A0E27",
@@ -164,6 +178,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 18,
     paddingBottom: 34,
+  },
+  topActionRow: {
+    alignItems: "flex-start",
+    marginTop: 32,
+    marginBottom: 0,
+  },
+  topActionBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   headerCard: {
     backgroundColor: "rgba(255, 255, 255, 0.04)",

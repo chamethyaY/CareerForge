@@ -86,99 +86,118 @@ export function SelectRoles({
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.headerCard}>
-        <View style={styles.headerRow}>
-          <LinearGradient
-            colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.headerIcon}
+    <View style={styles.screenContainer}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.topActionRow}>
+          <TouchableOpacity
+            style={styles.topActionBtn}
+            onPress={onBackToDashboard}
+            activeOpacity={0.8}
           >
-            <Ionicons name="sparkles" size={18} color="#FFFFFF" />
-          </LinearGradient>
-
-          <View>
-            <Text style={styles.headerTitle}>Forge AI</Text>
-            <Text style={styles.headerSubtitle}>Your career assistant</Text>
-          </View>
+            <Ionicons
+              name="chevron-back"
+              size={20}
+              color="rgba(255,255,255,0.7)"
+            />
+          </TouchableOpacity>
         </View>
 
-        <Text style={styles.message}>
-          Which role excites you most? Pick all that apply — I'll tailor your
-          projects to match.
-        </Text>
-      </View>
-
-      <Text style={styles.title}>What role interests you?</Text>
-      <Text style={styles.subtitle}>Pick all that apply</Text>
-
-      <View style={styles.rolesGrid}>
-        {ROLES.map((role) => {
-          const isSelected = selectedRoles.includes(role.id);
-
-          return (
-            <TouchableOpacity
-              key={role.id}
-              activeOpacity={0.85}
-              onPress={() => toggleRole(role.id)}
-              style={[styles.roleCard, isSelected && styles.roleCardSelected]}
+        <View style={styles.headerCard}>
+          <View style={styles.headerRow}>
+            <LinearGradient
+              colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.headerIcon}
             >
-              <View style={[styles.roleIcon, { backgroundColor: role.iconBg }]}>
-                <Ionicons
-                  name={role.icon as any}
-                  size={24}
-                  color={role.iconColor}
-                />
-              </View>
+              <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+            </LinearGradient>
 
-              <Text style={styles.roleTitle}>{role.title}</Text>
-              <Text style={styles.roleSubtitle}>{role.subtitle}</Text>
+            <View>
+              <Text style={styles.headerTitle}>Forge AI</Text>
+              <Text style={styles.headerSubtitle}>Your career assistant</Text>
+            </View>
+          </View>
 
-              {isSelected && (
-                <View style={styles.checkmark}>
-                  <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+          <Text style={styles.message}>
+            Which role excites you most? Pick all that apply — I'll tailor your
+            projects to match.
+          </Text>
+        </View>
+
+        <Text style={styles.title}>What role interests you?</Text>
+        <Text style={styles.subtitle}>Pick all that apply</Text>
+
+        <View style={styles.rolesGrid}>
+          {ROLES.map((role) => {
+            const isSelected = selectedRoles.includes(role.id);
+
+            return (
+              <TouchableOpacity
+                key={role.id}
+                activeOpacity={0.85}
+                onPress={() => toggleRole(role.id)}
+                style={[styles.roleCard, isSelected && styles.roleCardSelected]}
+              >
+                <View
+                  style={[styles.roleIcon, { backgroundColor: role.iconBg }]}
+                >
+                  <Ionicons
+                    name={role.icon as any}
+                    size={24}
+                    color={role.iconColor}
+                  />
                 </View>
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
 
-      <LinearGradient
-        colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[
-          styles.continueBtn,
-          selectedRoles.length === 0 && styles.continueBtnDisabled,
-        ]}
-      >
-        <TouchableOpacity
-          activeOpacity={0.85}
-          disabled={selectedRoles.length === 0}
-          onPress={handleContinue}
+                <Text style={styles.roleTitle}>{role.title}</Text>
+                <Text style={styles.roleSubtitle}>{role.subtitle}</Text>
+
+                <View
+                  style={[
+                    styles.checkmark,
+                    isSelected && styles.checkmarkSelected,
+                  ]}
+                >
+                  {isSelected ? (
+                    <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                  ) : null}
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <LinearGradient
+          colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[
+            styles.continueBtn,
+            selectedRoles.length === 0 && styles.continueBtnDisabled,
+          ]}
         >
-          <Text style={styles.continueBtnText}>Continue</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onBackToDashboard}
-        style={styles.backLink}
-      >
-        <Text style={styles.backLinkText}>Back to dashboard</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            disabled={selectedRoles.length === 0}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueBtnText}>Continue</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    backgroundColor: "#0A0E27",
+  },
   container: {
     flex: 1,
     backgroundColor: "#0A0E27",
@@ -187,6 +206,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 18,
     paddingBottom: 34,
+  },
+  topActionRow: {
+    alignItems: "flex-start",
+    marginTop: 32,
+    marginBottom: 0,
+  },
+  topActionBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   headerCard: {
     backgroundColor: "rgba(255, 255, 255, 0.04)",
@@ -281,14 +309,20 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    backgroundColor: "rgba(139, 92, 246, 0.95)",
+    top: 8,
+    right: 8,
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.12)",
+    backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
+  },
+  checkmarkSelected: {
+    backgroundColor: "rgba(139, 92, 246, 0.95)",
+    borderColor: "rgba(139, 92, 246, 0.95)",
   },
   continueBtn: {
     borderRadius: 12,

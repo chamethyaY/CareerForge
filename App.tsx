@@ -1,17 +1,18 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SignIn } from "./src/screens/signIn";
-import { SignUp } from "./src/screens/SignUp";
-import { SplashScreen } from "./src/screens/SplashScreen";
-import { Verify } from "./src/screens/Verify";
-import { ForgotPassword } from "./src/screens/ForgotPassword";
-import { ResetPassword } from "./src/screens/ResetPassword";
-import { Dashboard } from "./src/screens/Dashboard";
-import { CurrentLevel } from "./src/screens/CurrentLevel";
-import { SelectRoles } from "./src/screens/SelectRoles";
-import { Commitment } from "./src/screens/Commitment";
+import { SignIn } from "./src/screens/authentication/signIn";
+import { SignUp } from "./src/screens/authentication/SignUp";
+import { SplashScreen } from "./src/screens/authentication/SplashScreen";
+import { Verify } from "./src/screens/authentication/Verify";
+import { ForgotPassword } from "./src/screens/authentication/ForgotPassword";
+import { ResetPassword } from "./src/screens/authentication/ResetPassword";
+import { Dashboard } from "./src/screens/onboarding/primaryGoal";
+import { CurrentLevel } from "./src/screens/onboarding/CurrentLevel";
+import { SelectRoles } from "./src/screens/onboarding/SelectRoles";
+import { Commitment } from "./src/screens/onboarding/Commitment";
+import { MainApp } from "./src/screens/MainApp";
 import { supabase } from "./src/services/supabase";
 
 const styles = StyleSheet.create({
@@ -27,61 +28,133 @@ export default function App() {
     | "signin"
     | "signup"
     | "verify"
-    | "dashboard"
+    | "goal"
     | "forgot"
     | "reset"
     | "level"
     | "roles"
     | "commitment"
+    | "dashboard"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
   const [splashNextScreen, setSplashNextScreen] = useState<
-    "signin" | "dashboard"
+    "signin" | "goal"
   >("signin");
   const [goal, setGoal] = useState<string | null>(null);
   const [level, setLevel] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [timeCommitment, setTimeCommitment] = useState<string | null>(null);
 
-  const saveOnboarding = async (nextValues: {
-    goal?: string | null;
-    level?: string | null;
-    roles?: string[];
-    timeCommitment?: string | null;
-  } = {}) => {
-    const { data } = await supabase.auth.getUser();
-    const user = data.user;
-
-    if (!user) {
-      throw new Error("No authenticated user found.");
-    }
-
-    const payload: Record<string, unknown> = {
-      id: user.id,
-    };
-
+  // Keep onboarding values locally per-step. We only write once (insert-only)
+  // when the user completes onboarding.
+  const saveOnboarding = async (
+    nextValues: {
+      goal?: string | null;
+      level?: string | null;
+      roles?: string[];
+      timeCommitment?: string | null;
+    } = {},
+  ) => {
     const resolvedGoal = nextValues.goal ?? goal;
     const resolvedLevel = nextValues.level ?? level;
     const resolvedRoles = nextValues.roles ?? roles;
     const resolvedTimeCommitment = nextValues.timeCommitment ?? timeCommitment;
 
-    if (resolvedGoal !== null) payload.goal = resolvedGoal;
-    if (resolvedLevel !== null) payload.level = resolvedLevel;
-    if (resolvedRoles.length > 0) payload.roles = resolvedRoles;
-    if (resolvedTimeCommitment !== null) payload.time_commitment = resolvedTimeCommitment;
+    if (nextValues.goal !== undefined) setGoal(nextValues.goal ?? null);
+    if (nextValues.level !== undefined) setLevel(nextValues.level ?? null);
+    if (nextValues.roles !== undefined) setRoles(nextValues.roles ?? []);
+    if (nextValues.timeCommitment !== undefined)
+      setTimeCommitment(nextValues.timeCommitment ?? null);
+  };
 
-    const { error } = await supabase
-      .from("user_profiles")
-      .upsert(payload, { onConflict: "id" });
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] =
+    useState<boolean>(false);
 
-    if (error) {
-      throw error;
+  // On app start / auth change, check if the user already completed onboarding.
+  useEffect(() => {
+    let mounted = true;
+
+    const check = async () => {
+      try {
+        const { data } = await supabase.auth.getUser();
+        const user = data?.user ?? null;
+        if (!user) return;
+
+        const { data: profile, error } = await supabase
+          .from("user_profiles")
+          .select("onboarding_completed")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Failed reading profile:", error);
+          return;
+        }
+
+        if (mounted && profile && profile.onboarding_completed) {
+          setHasCompletedOnboarding(true);
+        }
+      } catch (err) {
+        console.error("check onboarding error:", err);
+      }
+    };
+
+    check();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const goToDashboardOrMain = () => {
+    if (hasCompletedOnboarding) setCurrentScreen("dashboard");
+    else setCurrentScreen("goal");
+  };
+
+  // Insert-only: attempt to insert the profile once. If a row already exists,
+  // do not overwrite it (no upsert). This enforces immutability after first save.
+  const insertOnboarding = async () => {
+    try {
+      const { data } = await supabase.auth.getUser();
+      const user = data?.user ?? null;
+      if (!user) {
+        throw new Error("No authenticated user found.");
+      }
+
+      const payload: any = {
+        id: user.id,
+        goal: goal,
+        level: level,
+        roles: roles,
+        time_commitment: timeCommitment,
+        onboarding_completed: true,
+      };
+
+      const { error } = await supabase.from("user_profiles").insert(payload);
+
+      if (error) {
+        // If the insert fails because the row already exists, ignore — we must
+        // not overwrite existing records. Different Supabase/Postgres setups
+        // may return different error shapes; treat duplicates as non-fatal.
+        const msg = (error && error.message) || "";
+        if (msg.toLowerCase().includes("duplicate")) {
+          console.warn("Profile already exists - not overwriting.");
+        } else {
+          throw error;
+        }
+      } else {
+        setHasCompletedOnboarding(true);
+      }
+    } catch (err) {
+      console.error("Failed to insert onboarding:", err);
+      throw err;
     }
   };
 
   const handleSplashComplete = () => {
-    setCurrentScreen(splashNextScreen);
+    if (splashNextScreen === "goal") goToDashboardOrMain();
+    else setCurrentScreen(splashNextScreen);
   };
 
   return (
@@ -96,7 +169,7 @@ export default function App() {
             setCurrentScreen("forgot");
           }}
           onNavigateToSplash={() => {
-            setSplashNextScreen("dashboard");
+            setSplashNextScreen("goal");
             setCurrentScreen("splash");
           }}
         />
@@ -126,7 +199,7 @@ export default function App() {
           onNavigateToSignIn={() => setCurrentScreen("signin")}
           onNavigateToReset={() => setCurrentScreen("reset")}
           onNavigateToHome={() => {
-            setCurrentScreen("dashboard");
+            goToDashboardOrMain();
           }}
         />
       ) : currentScreen === "reset" ? (
@@ -137,7 +210,7 @@ export default function App() {
         />
       ) : currentScreen === "level" ? (
         <CurrentLevel
-          onBackToDashboard={() => setCurrentScreen("dashboard")}
+          onBackToDashboard={() => goToDashboardOrMain()}
           onContinue={async (selectedLevel) => {
             setLevel(selectedLevel);
 
@@ -152,7 +225,7 @@ export default function App() {
         />
       ) : currentScreen === "roles" ? (
         <SelectRoles
-          onBackToDashboard={() => setCurrentScreen("dashboard")}
+          onBackToDashboard={() => goToDashboardOrMain()}
           onContinue={async (selectedRoles) => {
             setRoles(selectedRoles);
 
@@ -167,13 +240,23 @@ export default function App() {
         />
       ) : currentScreen === "commitment" ? (
         <Commitment
-          onBackToDashboard={() => setCurrentScreen("dashboard")}
+          onBackToDashboard={() => goToDashboardOrMain()}
           onContinue={async (selectedCommitment) => {
             setTimeCommitment(selectedCommitment);
 
             try {
               await saveOnboarding({ timeCommitment: selectedCommitment });
-              setCurrentScreen("dashboard");
+              // First time finalise: insert-only write, then navigate.
+              try {
+                await insertOnboarding();
+              } catch (e) {
+                console.error("Insert onboarding failed:", e);
+                Alert.alert(
+                  "Save failed",
+                  "Could not save your commitment level.",
+                );
+              }
+              goToDashboardOrMain();
             } catch (error) {
               console.error("Failed to save onboarding:", error);
               Alert.alert(
@@ -183,6 +266,8 @@ export default function App() {
             }
           }}
         />
+      ) : currentScreen === "dashboard" ? (
+        <MainApp />
       ) : (
         <Dashboard
           onSignOut={() => setCurrentScreen("signin")}
