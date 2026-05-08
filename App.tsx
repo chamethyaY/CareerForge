@@ -11,6 +11,7 @@ import { ResetPassword } from "./src/screens/ResetPassword";
 import { Dashboard } from "./src/screens/Dashboard";
 import { CurrentLevel } from "./src/screens/CurrentLevel";
 import { SelectRoles } from "./src/screens/SelectRoles";
+import { Commitment } from "./src/screens/Commitment";
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -30,6 +31,7 @@ export default function App() {
     | "reset"
     | "level"
     | "roles"
+    | "commitment"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
@@ -98,7 +100,12 @@ export default function App() {
           onContinue={() => setCurrentScreen("roles")}
         />
       ) : currentScreen === "roles" ? (
-        <SelectRoles onBackToDashboard={() => setCurrentScreen("dashboard")} />
+        <SelectRoles
+          onBackToDashboard={() => setCurrentScreen("dashboard")}
+          onContinue={() => setCurrentScreen("commitment")}
+        />
+      ) : currentScreen === "commitment" ? (
+        <Commitment onBackToDashboard={() => setCurrentScreen("dashboard")} />
       ) : (
         <Dashboard
           onSignOut={() => setCurrentScreen("signin")}
