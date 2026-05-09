@@ -146,13 +146,14 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 20,
+    paddingTop: 40,
     paddingBottom: 40,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 12,
     marginBottom: 32,
   },
   headerLeft: {
