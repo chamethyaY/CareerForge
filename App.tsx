@@ -39,14 +39,23 @@ export default function App() {
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
   const [splashNextScreen, setSplashNextScreen] = useState<
-    | "signin"
-    | "goal"
-    | "dashboard"
+    "signin" | "goal" | "dashboard"
   >("signin");
   const [goal, setGoal] = useState<string | null>(null);
   const [level, setLevel] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [timeCommitment, setTimeCommitment] = useState<string | null>(null);
+
+  const resetSessionState = () => {
+    setVerifyEmail("");
+    setVerifyFlow("signup");
+    setSplashNextScreen("signin");
+    setHasCompletedOnboarding(false);
+    setGoal(null);
+    setLevel(null);
+    setRoles([]);
+    setTimeCommitment(null);
+  };
 
   // Keep onboarding values locally per-step. We only write once (insert-only)
   // when the user completes onboarding.
@@ -73,6 +82,26 @@ export default function App() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] =
     useState<boolean>(false);
 
+  const syncOnboardingState = async (userId: string | null) => {
+    if (!userId) {
+      setHasCompletedOnboarding(false);
+      return;
+    }
+
+    const { data: profile, error } = await supabase
+      .from("user_profiles")
+      .select("onboarding_completed")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed reading profile:", error);
+      return;
+    }
+
+    setHasCompletedOnboarding(Boolean(profile?.onboarding_completed));
+  };
+
   // On app start / auth change, check if the user already completed onboarding.
   useEffect(() => {
     let mounted = true;
@@ -81,22 +110,14 @@ export default function App() {
       try {
         const { data } = await supabase.auth.getUser();
         const user = data?.user ?? null;
-        if (!user) return;
+        if (!mounted) return;
 
-        const { data: profile, error } = await supabase
-          .from("user_profiles")
-          .select("onboarding_completed")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (error) {
-          console.error("Failed reading profile:", error);
+        if (!user) {
+          resetSessionState();
           return;
         }
 
-        if (mounted && profile && profile.onboarding_completed) {
-          setHasCompletedOnboarding(true);
-        }
+        await syncOnboardingState(user.id);
       } catch (err) {
         console.error("check onboarding error:", err);
       }
@@ -104,8 +125,23 @@ export default function App() {
 
     check();
 
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!mounted) return;
+
+      if (event === "SIGNED_OUT" || !session?.user) {
+        resetSessionState();
+        setCurrentScreen("signin");
+        return;
+      }
+
+      void syncOnboardingState(session.user.id);
+    });
+
     return () => {
       mounted = false;
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -159,6 +195,22 @@ export default function App() {
     else setCurrentScreen(splashNextScreen);
   };
 
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        Alert.alert("Sign out failed", error.message || "Please try again.");
+        return;
+      }
+
+      resetSessionState();
+      setCurrentScreen("signin");
+    } catch (err) {
+      console.error("Sign out error:", err);
+      Alert.alert("Sign out failed", "Please try again.");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
@@ -171,8 +223,7 @@ export default function App() {
             setCurrentScreen("forgot");
           }}
           onNavigateToSplash={() => {
-            setSplashNextScreen("dashboard");
-            setCurrentScreen("splash");
+            setCurrentScreen("dashboard");
           }}
         />
       ) : currentScreen === "forgot" ? (
@@ -270,7 +321,7 @@ export default function App() {
           }}
         />
       ) : currentScreen === "dashboard" ? (
-        <MainApp />
+        <MainApp onSignOut={handleSignOut} />
       ) : (
         <Dashboard
           onSignOut={() => setCurrentScreen("signin")}
