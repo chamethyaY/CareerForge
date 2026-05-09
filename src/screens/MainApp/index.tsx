@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { supabase } from "../../services/supabase";
 
 type Props = {
   onSignOut?: () => void;
@@ -19,6 +20,8 @@ export function MainApp({ onSignOut }: Props) {
   const [dayStreak] = useState(12);
   const [skillsDone] = useState(18);
   const [projectsBuilt] = useState(4);
+  const [userName, setUserName] = useState<string>("");
+  const [initials, setInitials] = useState<string>("?");
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -28,6 +31,43 @@ export function MainApp({ onSignOut }: Props) {
     if (hour < 18) return "Good afternoon";
     return "Good evening";
   };
+
+  const computeInitials = (nameOrEmail: string) => {
+    if (!nameOrEmail) return "?";
+    const name = nameOrEmail.trim();
+    const parts = name.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    // if single word (or email), try to use first two letters
+    const withoutAt = name.split("@")[0];
+    if (withoutAt.length >= 2) return withoutAt.slice(0, 2).toUpperCase();
+    return withoutAt[0].toUpperCase();
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    const loadUser = async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) return;
+        const user = data?.user as any;
+        if (!user) return;
+        // prefer metadata name, fall back to user.email
+        const meta = user.user_metadata || user.user_metadata || {};
+        const name = meta?.name || meta?.full_name || user.email || "";
+        if (!mounted) return;
+        setUserName(name);
+        setInitials(computeInitials(name));
+      } catch (e) {
+        // ignore
+      }
+    };
+    loadUser();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <ScrollView
@@ -39,11 +79,11 @@ export function MainApp({ onSignOut }: Props) {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.greetingText}>{getGreeting()}</Text>
-          <Text style={styles.userName}>Alex Chen</Text>
+          <Text style={styles.userName}>{userName || "Welcome"}</Text>
         </View>
         <TouchableOpacity onPress={onSignOut}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>AC</Text>
+            <Text style={styles.avatarText}>{initials}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -60,10 +100,7 @@ export function MainApp({ onSignOut }: Props) {
             colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={[
-              styles.progressBar,
-              { width: `${internshipProgress}%` },
-            ]}
+            style={[styles.progressBar, { width: `${internshipProgress}%` }]}
           />
         </View>
       </View>
