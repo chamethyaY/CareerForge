@@ -1,10 +1,5 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-<img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
-<img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" />
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-<img src="https://img.shields.io/badge/Claude_API-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" />
 
 <br/><br/>
 
@@ -46,9 +41,9 @@ Smart Onboarding → Personalised Roadmap → Skill Tracking → Internship Read
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔐 Authentication System
+###  Authentication System
 A complete, production-grade auth flow built on Supabase Auth.
 
 - Email + OTP verification on sign up
@@ -57,7 +52,7 @@ A complete, production-grade auth flow built on Supabase Auth.
 - Sign out clears the device session only — all profile data and progress persists in the database forever
 - Row Level Security enforces data isolation at the database level, not just the application layer
 
-### 🎯 Smart Onboarding
+###  Smart Onboarding
 A 4-step personalisation flow that runs once for new users. Every answer is saved to Supabase and drives every feature in the app.
 
 | Step | What we capture | How it personalises the app |
@@ -67,7 +62,7 @@ A 4-step personalisation flow that runs once for new users. Every answer is save
 | Role interests | frontend / backend / mobile / devops / AI | Filters project recommendations and skill roadmap |
 | Time commitment | casual / regular / intensive | Shapes weekly learning targets and AI pacing |
 
-### 📊 Internship Readiness Score
+###  Internship Readiness Score
 A dynamic, data-driven score that reflects real progress — not just activity.
 
 ```
@@ -80,7 +75,7 @@ The score adapts based on the user's goal:
 - **Build Skills** → "Skill Mastery" — weights depth and consistency, focused on genuine learning
 - **Career Switch** → "Career Transition" — weights foundations and projects, prioritising portfolio building
 
-### 🌳 Skill Progression System
+###  Skill Progression System
 An interactive skill tree covering every major development domain.
 
 - Beginner → Intermediate → Advanced progression per domain
@@ -89,7 +84,7 @@ An interactive skill tree covering every major development domain.
 - Progress bars per domain showing exactly how far along each track the user is
 - Confidence indicators: Confident / Learning / Locked
 
-### 🚀 Project Recommendation Engine
+###  Project Recommendation Engine
 Personalised project recommendations filtered by the user's role interests and skill level.
 
 Every recommended project includes:
@@ -98,7 +93,7 @@ Every recommended project includes:
 - Complexity rating to keep users challenged without being overwhelmed
 - CV impact score — how much this project will actually impress a recruiter
 
-### 🤖 Forge AI — Career Intelligence
+###  Forge AI — Career Intelligence
 A 24/7 AI career mentor powered by the Claude API. Forge AI knows the user's goal, skill level, role interests, and current progress — so every response is genuinely personalised.
 
 - Generates personalised career roadmaps on demand
@@ -106,7 +101,7 @@ A 24/7 AI career mentor powered by the Claude API. Forge AI knows the user's goa
 - Identifies skill gaps by comparing the user's profile against real internship requirements
 - Provides one focused daily insight per dashboard visit, cached and refreshed every 24 hours
 
-### 📁 Portfolio Generator
+###  Portfolio Generator
 The AI transforms completed projects into professional assets ready to use immediately.
 
 - **GitHub** — repository descriptions with impact-focused language
@@ -115,7 +110,7 @@ The AI transforms completed projects into professional assets ready to use immed
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
@@ -131,7 +126,7 @@ The AI transforms completed projects into professional assets ready to use immed
 
 ---
 
-## 🏗 Architecture
+##  Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -162,7 +157,7 @@ The AI transforms completed projects into professional assets ready to use immed
 
 ---
 
-## 🗄 Database Design
+##  Database Design
 
 CareerForge uses **Supabase (PostgreSQL)** with Row Level Security on every table. Users can only read and write their own data — enforced at the database level, not just the application layer.
 
@@ -229,7 +224,7 @@ with check (auth.uid() = id);
 
 ---
 
-## 📱 Screens
+##  Screens
 
 ### Authentication
 **Sign Up** — email + password with Supabase OTP email verification. New accounts automatically enter the onboarding flow.
@@ -262,7 +257,7 @@ with check (auth.uid() = id);
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js `>=18.x`
@@ -338,7 +333,7 @@ npx expo start
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 careerforge/
@@ -368,7 +363,7 @@ careerforge/
 
 ---
 
-## 🔒 Security
+##  Security
 
 - **Row Level Security** on every Supabase table — data isolation enforced at database level
 - **JWT tokens** managed by Supabase Auth with automatic refresh
@@ -378,7 +373,7 @@ careerforge/
 
 ---
 
-## 👩‍💻 Author
+##  Author
 
 **Chamethya Yasodie**
 Full-Stack Developer · BSc Computer Science · University of Westminster (IIT Colombo)
