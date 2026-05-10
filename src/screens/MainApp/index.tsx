@@ -49,18 +49,54 @@ export function MainApp({ onSignOut }: Props) {
     let mounted = true;
     const loadUser = async () => {
       try {
-        const { data, error } = await supabase.auth.getUser();
-        if (error) return;
+        const { data, error: userError } = await supabase.auth.getUser();
+        if (userError) {
+          console.warn("getUser error:", userError);
+          return;
+        }
         const user = data?.user as any;
-        if (!user) return;
-        // prefer metadata name, fall back to user.email
-        const meta = user.user_metadata || user.user_metadata || {};
-        const name = meta?.name || meta?.full_name || user.email || "";
+        if (!user) {
+          console.warn("No user found");
+          return;
+        }
+
+        console.log("Loading user:", user.id, user.email);
+
+        // Try to read the display name from user_profiles
+        let name = "";
+        try {
+          const { data: profile, error: profileErr } = await supabase
+            .from("user_profiles")
+            .select("name, full_name, display_name")
+            .eq("id", user.id)
+            .single();
+
+          console.log("Profile query result:", { profile, profileErr });
+
+          if (profileErr) {
+            console.warn("Profile query error:", profileErr.message);
+          } else if (profile) {
+            name =
+              profile.name || profile.full_name || profile.display_name || "";
+            console.log("Found name from profile:", name);
+          }
+        } catch (e) {
+          console.warn("Profile read exception:", e);
+        }
+
+        // Fallback to auth metadata
+        const meta = user.user_metadata || {};
+        if (!name) {
+          name = meta?.name || meta?.full_name || user.email || "";
+          console.log("Fallback to metadata/email:", name);
+        }
+
         if (!mounted) return;
+        console.log("Setting userName to:", name);
         setUserName(name);
         setInitials(computeInitials(name));
       } catch (e) {
-        // ignore
+        console.error("loadUser exception:", e);
       }
     };
     loadUser();

@@ -18,6 +18,7 @@ import {
 
 type VerifyProps = {
   email: string;
+  name?: string;
   mode?: "signup" | "recovery";
   onNavigateToSignIn?: () => void;
   onNavigateToReset?: () => void;
@@ -28,6 +29,7 @@ const OTP_LENGTH = 6;
 
 export function Verify({
   email,
+  name,
   mode = "signup",
   onNavigateToSignIn,
   onNavigateToReset,
@@ -80,6 +82,44 @@ export function Verify({
         );
         onNavigateToReset?.();
         return;
+      }
+
+      // For signup flow, create or update profile row with the supplied name.
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        const user = userData?.user as any;
+        console.log("After verifyOtp, user:", user?.id, user?.email);
+        if (user) {
+          try {
+                const payload: any = { id: user.id };
+                // prefer explicit name param, fall back to auth metadata
+                const meta = (user.user_metadata || {}) as any;
+                const finalName = name || meta?.name || meta?.full_name || meta?.display_name || null;
+                if (finalName) {
+                  payload.name = finalName;
+                  console.log("Saving profile with name:", finalName);
+                } else {
+                  console.warn("No name provided to save in profile; skipping name field");
+                }
+
+            // Use upsert to handle existing rows (e.g., from RLS triggers)
+            const { data: upsertResult, error: upsertErr } = await supabase
+              .from("user_profiles")
+              .upsert(payload, { onConflict: "id" });
+
+            console.log("Upsert result:", { upsertResult, upsertErr });
+
+            if (upsertErr) {
+              console.error("Failed to save profile:", upsertErr.message);
+            } else {
+              console.log("Profile saved successfully");
+            }
+          } catch (e) {
+            console.error("Exception saving profile:", e);
+          }
+        }
+      } catch (e) {
+        console.error("Error in profile save block:", e);
       }
 
       onNavigateToHome?.();

@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "../../services/supabase";
+import { supabase } from "../services/supabase";
 import {
   Alert,
   Keyboard,
@@ -85,9 +85,6 @@ export function SignUp({
 
       if (signError) {
         const msg = signError.message ?? "";
-        // eslint-disable-next-line no-console
-        console.warn("SignUp error:", { code: signError.code, msg });
-
         if (/rate limit|email rate limit|429/i.test(msg)) {
           Alert.alert(
             "Too many requests",
@@ -98,15 +95,23 @@ export function SignUp({
           console.warn("supabase.signUp rate limit:", msg);
           return;
         }
-
+        if (isDuplicateEmailError(signError.message)) {
+          Alert.alert("Sign up failed", "There is a user with the same email.");
+          return;
+        }
         setError(signError.message || "Sign up failed.");
+        // show server message for easier debugging
+        // eslint-disable-next-line no-console
+        console.warn("signUp error message:", signError.message);
         return;
       }
 
       onNavigateToVerify?.(email, fullName);
     } catch (e: any) {
-      // eslint-disable-next-line no-console
-      console.warn("SignUp catch error:", e?.message);
+      if (isDuplicateEmailError(e?.message)) {
+        Alert.alert("Sign up failed", "There is a user with the same email.");
+        return;
+      }
       setError(e?.message || "Unexpected error");
     } finally {
       setLoading(false);

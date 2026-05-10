@@ -37,6 +37,7 @@ export default function App() {
     | "dashboard"
   >("splash");
   const [verifyEmail, setVerifyEmail] = useState("");
+  const [verifyName, setVerifyName] = useState<string | undefined>(undefined);
   const [verifyFlow, setVerifyFlow] = useState<"signup" | "recovery">("signup");
   const [splashNextScreen, setSplashNextScreen] = useState<
     "signin" | "goal" | "dashboard"
@@ -152,7 +153,16 @@ export default function App() {
 
   // Insert-only: attempt to insert the profile once. If a row already exists,
   // do not overwrite it (no upsert). This enforces immutability after first save.
-  const insertOnboarding = async () => {
+  // Accept optional overrides so callers can pass the most recent step value
+  // (avoids reading stale state when setState hasn't flushed yet).
+  const insertOnboarding = async (
+    overrides: {
+      goal?: string | null;
+      level?: string | null;
+      roles?: string[];
+      timeCommitment?: string | null;
+    } = {},
+  ) => {
     try {
       const { data } = await supabase.auth.getUser();
       const user = data?.user ?? null;
@@ -162,13 +172,14 @@ export default function App() {
 
       const payload: any = {
         id: user.id,
-        goal: goal,
-        level: level,
-        roles: roles,
-        time_commitment: timeCommitment,
+        goal: overrides.goal ?? goal,
+        level: overrides.level ?? level,
+        roles: overrides.roles ?? roles,
+        time_commitment: overrides.timeCommitment ?? timeCommitment,
         onboarding_completed: true,
       };
 
+      console.log("Inserting onboarding payload:", payload);
       const { error } = await supabase.from("user_profiles").insert(payload);
 
       if (error) {
@@ -238,8 +249,9 @@ export default function App() {
       ) : currentScreen === "signup" ? (
         <SignUp
           onNavigateToSignIn={() => setCurrentScreen("signin")}
-          onNavigateToVerify={(email) => {
+          onNavigateToVerify={(email, fullName) => {
             setVerifyEmail(email);
+            setVerifyName(fullName);
             setVerifyFlow("signup");
             setCurrentScreen("verify");
           }}
@@ -248,6 +260,7 @@ export default function App() {
       ) : currentScreen === "verify" ? (
         <Verify
           email={verifyEmail}
+          name={verifyName}
           mode={verifyFlow}
           onNavigateToSignIn={() => setCurrentScreen("signin")}
           onNavigateToReset={() => setCurrentScreen("reset")}
@@ -300,17 +313,18 @@ export default function App() {
 
             try {
               await saveOnboarding({ timeCommitment: selectedCommitment });
-              // First time finalise: insert-only write, then navigate.
-              try {
-                await insertOnboarding();
-              } catch (e) {
-                console.error("Insert onboarding failed:", e);
-                Alert.alert(
-                  "Save failed",
-                  "Could not save your commitment level.",
-                );
-              }
-              goToDashboardOrMain();
+              // Start insert in background and navigate immediately to dashboard
+              // so user isn't blocked by network latency. Insert is insert-only
+              // and will not overwrite existing records.
+              insertOnboarding({ timeCommitment: selectedCommitment }).catch(
+                (e) => {
+                  console.error("Insert onboarding failed:", e);
+                },
+              );
+
+              // Mark onboarding as completed locally and go to dashboard.
+              setHasCompletedOnboarding(true);
+              setCurrentScreen("dashboard");
             } catch (error) {
               console.error("Failed to save onboarding:", error);
               Alert.alert(

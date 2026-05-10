@@ -249,6 +249,7 @@ export default function OnboardingScreen() {
         onboarding_completed: true,
       };
 
+      console.log("OnboardingFlow: inserting payload:", payload);
       const { error } = await supabase.from("user_profiles").insert(payload);
 
       setSaving(false);
