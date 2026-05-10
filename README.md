@@ -1,286 +1,301 @@
+<div align="center">
+
+<img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
+<img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" />
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/Claude_API-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" />
+
 # CareerForge
 
 ### *The AI-Powered Career Operating System for Student Developers*
 
-**CareerForge transforms students into internship-ready developers through structured skill development, intelligent project guidance, and personalized career intelligence — all in one unified platform.**
+> **CareerForge transforms students into internship-ready developers** through personalised AI roadmaps, structured skill tracking, and real-time career intelligence — all in one mobile app.
+
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [Screens](#-screens) • [Roadmap](#-roadmap)
+
+</div>
+
 ---
 
 ## The Problem
 
-Most students in tech face the same cycle of confusion:
+Most CS students face the same painful cycle:
 
-> *"I've completed a few tutorials, but I don't know what to learn next. I don't know what projects to build, and I have no idea if I'm actually ready for internships."*
+> *"I've done the tutorials. I've watched the YouTube videos. But I don't know what to build, what skills actually matter, or if I'm actually ready for internships."*
 
-Traditional learning platforms teach concepts — but they don't build careers. Students are left to figure out:
+Generic learning platforms teach syntax — not careers. Students are left guessing:
 
-- What skills are actually relevant for the industry
--        What projects will stand out on a CV
-- How to measure their own progress objectively
-- When they're genuinely ready to apply for internships
-- How to present themselves professionally
-
----
+- Which skills do real internships actually require?
+- What projects will stand out to recruiters?
+- Am I ready to apply — or am I wasting my time?
 
 ## The Solution
 
-**CareerForge** is an AI-driven career operating system that closes the gap between *learning* and *landing your first internship*.
+**CareerForge** closes the gap between *learning* and *landing your first internship*.
 
-It acts as your **personal career mentor**, **roadmap generator**, **project advisor**, and **readiness tracker** — all in one place.
+It works like a **personal career mentor that's always available** — generating personalised roadmaps, recommending portfolio-worthy projects, tracking your progress, and giving you an honest readiness score so you know exactly where you stand.
+
+---
+
+## ✨ Features
+
+### 🤖 AI Career Intelligence (Forge AI)
+A 24/7 career mentor powered by the Claude API. Forge AI knows your goal, skill level, and interests — so every recommendation is personalised to *you*, not a generic student.
+
+- Generates personalised learning roadmaps based on `goal + level + roles`
+- Answers "What should I learn next?" with context-aware guidance
+- Identifies skill gaps against real internship requirements
+- Gives actionable tips that update as your profile evolves
+
+### 🗺️ Smart Onboarding
+A 4-step onboarding flow that captures the user's profile before they see a single screen:
+
+| Step | What we capture | How it's used |
+|------|----------------|---------------|
+| Primary goal | internship / skills / career switch | Powers readiness score label + weights |
+| Current level | beginner / intermediate / advanced | Sets starting point in skill tree |
+| Role interests | frontend / backend / mobile / AI / DevOps | Filters projects + AI recommendations |
+| Time commitment | casual / regular / intensive | Shapes learning pace + AI suggestions |
+
+### 📊 Internship Readiness Score
+A dynamic score that tells you exactly where you stand — no guessing.
 
 ```
-Learning → Building → Internship Readiness → Career Success
+Score = (Skills × 35%) + (Projects × 30%) + (Consistency × 20%) + (Depth × 15%)
+```
+
+The label, color, and weighting **change based on the user's goal**:
+
+- `internship` → "Internship Readiness" — weights skills + projects highest (what recruiters care about)
+- `skills` → "Skill Mastery" — weights depth + consistency (pure learning focus)
+- `switch` → "Career Transition" — weights foundations + projects (portfolio-first approach)
+
+### 🌳 Skill Progression System
+An interactive skill tree that goes from Beginner → Intermediate → Advanced across:
+- Frontend (HTML/CSS → React → TypeScript → Testing)
+- Backend (Node.js → APIs → Databases → Auth)
+- Mobile (React Native → Expo → Native APIs)
+- DevOps, AI/ML, and more
+
+Every "Mark done" tap writes to `skill_progress` in Supabase and immediately updates the readiness score.
+
+### 🚀 Project Recommendation Engine
+Stop building random projects. Build ones that actually impress recruiters.
+
+Each recommendation includes:
+- Full feature breakdown with scope guidance
+- Suggested tech stack aligned to the user's skill level
+- Complexity rating to keep users in the challenge zone
+- CV impact score showing how much it will actually matter
+
+### 📁 Portfolio Generator *(Phase 4)*
+The AI transforms completed projects into:
+- GitHub-ready repository descriptions
+- CV bullet points in STAR format
+- LinkedIn project summaries optimised for recruiter visibility
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology | Why |
+|-------|-----------|-----|
+| **Mobile** | React Native + Expo | Cross-platform iOS & Android from one codebase |
+| **Language** | TypeScript | Type safety across the entire app |
+| **Navigation** | Expo Router | File-based routing, clean and scalable |
+| **Backend & DB** | Supabase (PostgreSQL) | Auth + database + real-time + RLS in one |
+| **Authentication** | Supabase Auth | Email/OTP auth with session management |
+| **AI Engine** | Claude API (Anthropic) | Personalised career roadmaps + skill gap analysis |
+| **Icons** | @expo/vector-icons | Ionicons throughout the UI |
+
+---
+
+## 🗄️ Database Architecture
+
+CareerForge uses **Supabase (PostgreSQL)** with Row Level Security on every table so users can only ever access their own data.
+
+```sql
+-- Core profile (filled once at onboarding)
+user_profiles
+  id uuid references auth.users PRIMARY KEY
+  goal text                    -- 'internship' | 'skills' | 'switch'
+  level text                   -- 'beginner' | 'intermediate' | 'advanced'
+  roles text[]                 -- ['frontend', 'mobile', ...]
+  time_commitment text         -- 'casual' | 'regular' | 'intensive'
+  onboarding_completed boolean
+
+-- Activity tables (grow as user uses the app)
+skill_progress   → one row per completed skill
+user_projects    → one row per completed project
+daily_activity   → one row per day app is opened (streak tracking)
+ai_insights      → cached AI tips (refreshed every 24hrs)
+```
+
+**Row Level Security** ensures every query is scoped to `auth.uid()`:
+```sql
+create policy "Users can only access own data"
+on user_profiles for all
+using (auth.uid() = id);
 ```
 
 ---
 
-## Core Features
-
-### AI Career Intelligence Engine
-Your personal career mentor, available 24/7.
-
-- Generates personalized career roadmaps based on your goals and current skill level
-- Answers "What should I learn next?" with context-aware, actionable guidance
-- Identifies skill gaps by comparing your profile against real internship requirements
-- Adapts recommendations continuously as your profile evolves
-
-###  Skill Progression System
-Visual, satisfying, and structured skill tracking.
-
-- Interactive skill tree from **Beginner → Intermediate → Advanced**
-- Covers all major domains: Frontend, Backend, Mobile, DevOps, AI/ML, and more
-- Progress analytics dashboard with streak tracking and completion milestones
-- Milestone-based achievement system to keep motivation high
-
-###  Project Recommendation Engine
-Stop building random projects. Build portfolio-worthy ones.
-
-Each recommended project includes:
-- Full **feature breakdown** with scope guidance
-- Suggested **tech stack** aligned to your current skill level
-- **Complexity rating** so you're always in the challenge zone
-- **CV impact score** — how much this project will actually impress recruiters
-
-###  Internship Readiness Score
-A dynamic, data-driven score that shows exactly where you stand.
-
-Your readiness score is calculated from:
-
-| Factor | Weight |
-|--------|--------|
-| Skills Completed | 35% |
-| Projects Built | 30% |
-| Consistency & Streaks | 20% |
-| Technical Depth | 15% |
-
-Get a clear percentage score, plus specific actions to improve it — no more guessing.
-
-###  Portfolio Generator
-Turn your work into professional assets instantly.
-
-The AI transforms your tracked projects into:
-- **GitHub-ready** repository descriptions with impact-focused language
-- **CV bullet points** using the STAR format (Situation, Task, Action, Result)
-- **LinkedIn project summaries** optimized for recruiter visibility
-
-###  Smart Guidance System
-Stay on track without being overwhelmed.
-
-- Personalized learning reminders based on your schedule and pace
-- Milestone-based notifications that celebrate progress
-- Adaptive goal tracking that adjusts to your availability
-
----
-
-##  System Architecture
+## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      CareerForge App                        │
-│                   (Flutter / React Native)                  │
-├─────────────┬───────────────────┬───────────────────────────┤
-│   Auth &    │   User Dashboard  │    AI Interaction Layer   │
-│   Profile   │   Skill Tracker   │    (Chat + Roadmaps)      │
-└──────┬──────┴────────┬──────────┴──────────┬────────────────┘
-       │               │                     │
-       ▼               ▼                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     Backend API Layer                       │
-│              (Node.js / FastAPI / Firebase)                 │
-├──────────────────────┬──────────────────────────────────────┤
-│  User Data Service   │        AI Orchestration Service      │
-│  Progress Tracking   │   (Roadmap Gen · Gap Analysis ·      │
-│  Portfolio Storage   │    Project Recs · Readiness Score)   │
-└──────────────────────┴──────────────────┬───────────────────┘
-                                          │
-                                          ▼
-                           ┌──────────────────────────┐
-                           │     AI Provider Layer     │
-                           │   LLM API (OpenAI / etc.) │
-                           │   Vector DB (Embeddings)  │
-                           │   Job Market Data Feed    │
-                           └──────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│              CareerForge Mobile App              │
+│           React Native + Expo + TypeScript       │
+├──────────────┬─────────────────┬────────────────┤
+│  Auth Flow   │   Dashboard     │   AI Layer     │
+│  Onboarding  │   Skill Tree    │   Forge AI     │
+│  Routing     │   Projects      │   Roadmaps     │
+└──────┬───────┴────────┬────────┴───────┬────────┘
+       │                │                │
+       ▼                ▼                ▼
+┌─────────────────────────────────────────────────┐
+│                   Supabase                       │
+│   Auth · PostgreSQL · RLS · Real-time           │
+└─────────────────────────────┬───────────────────┘
+                              │
+                              ▼
+                   ┌─────────────────────┐
+                   │    Claude API        │
+                   │  Anthropic claude-   │
+                   │  sonnet-4            │
+                   └─────────────────────┘
 ```
 
 ---
 
-##  Tech Stack
+## 📱 Screens
 
-| Layer | Technology |
-|-------|------------|
-| Mobile Frontend | Flutter (iOS & Android) |
-| Backend API | Node.js / FastAPI |
-| Database | Firebase Firestore / PostgreSQL |
-| Authentication | Firebase Auth |
-| AI Engine | OpenAI GPT-4 / Claude API |
-| Vector Search | Pinecone / Supabase pgvector |
-| Notifications | Firebase Cloud Messaging |
-| CI/CD | GitHub Actions |
+| Screen | Description | Status |
+|--------|-------------|--------|
+| Splash | Session check + routing | ✅ Done |
+| Sign Up / Sign In | Supabase auth with OTP | ✅ Done |
+| Onboarding (4 steps) | Goal, level, roles, time captured | ✅ Done |
+| Dashboard | Readiness score, stats, quick actions, AI insight | 🔨 Building |
+| Skill Tree | Interactive skill tree with progress tracking | 📅 Phase 3 |
+| AI Chat | Forge AI — personalised career mentor | 📅 Phase 4 |
+| Projects | Filtered project recommendations | 📅 Phase 4 |
+| Portfolio Generator | AI-powered CV + GitHub + LinkedIn content | 📅 Phase 5 |
 
 ---
 
-##  Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Flutter SDK `>=3.0.0`
-- Dart `>=3.0.0`
 - Node.js `>=18.x`
-- Firebase project (for auth & database)
-- OpenAI API key (for AI features)
+- Expo CLI
+- Supabase account
+- Anthropic API key
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/careerforge.git
+# Clone the repo
+git clone https://github.com/chamethyaY/careerforge.git
 cd careerforge
-
-# Install Flutter dependencies
-flutter pub get
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys
-
-# Run the app
-flutter run
-```
-
-### Backend Setup
-
-```bash
-cd backend
 
 # Install dependencies
 npm install
 
-# Configure environment
+# Set up environment variables
 cp .env.example .env
-
-# Start the development server
-npm run dev
 ```
 
 ### Environment Variables
 
 ```env
-# AI Configuration
-OPENAI_API_KEY=your_openai_key_here
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_project_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+ANTHROPIC_API_KEY=your_claude_api_key
+```
 
-# Firebase
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_API_KEY=your_firebase_api_key
+### Supabase Setup
 
-# Backend
-API_BASE_URL=http://localhost:3000
-JWT_SECRET=your_jwt_secret
+Run these in your Supabase SQL Editor:
+
+```sql
+-- User profiles table
+create table user_profiles (
+  id uuid references auth.users primary key,
+  goal text,
+  level text,
+  roles text[],
+  time_commitment text,
+  onboarding_completed boolean default false,
+  created_at timestamptz default now()
+);
+
+-- Enable Row Level Security
+alter table user_profiles enable row level security;
+
+create policy "Users can manage own profile"
+on user_profiles for all
+using (auth.uid() = id)
+with check (auth.uid() = id);
+```
+
+### Run the app
+
+```bash
+npx expo start
 ```
 
 ---
 
-## Screenshots
+## 🗺️ Roadmap
 
-> *Coming soon — the app is currently in active development.*
+### Phase 1 — Foundation ✅
+- [x] Project architecture + navigation
+- [x] Supabase auth (sign up, sign in, sign out, OTP)
+- [x] Smart onboarding flow (4 steps, saves to Supabase)
+- [x] Routing logic (new users → onboarding, returning → dashboard)
 
----
+### Phase 2 — Dashboard 🔨
+- [ ] Dashboard UI with readiness score
+- [ ] Goal-based score weighting
+- [ ] Streak tracking via daily_activity table
+- [ ] Stats row (skills, projects, streak)
 
-##  Project Structure
+### Phase 3 — Skill System
+- [ ] Interactive skill tree
+- [ ] skill_progress table + RLS
+- [ ] Skill completion → score update
 
-```
-careerforge/
-├── lib/
-│   ├── core/               # App configuration, themes, constants
-│   ├── features/
-│   │   ├── auth/           # Authentication screens & logic
-│   │   ├── dashboard/      # Main dashboard & analytics
-│   │   ├── roadmap/        # AI roadmap generation
-│   │   ├── projects/       # Project recommendation engine
-│   │   ├── portfolio/      # Portfolio generator
-│   │   └── readiness/      # Internship readiness score
-│   ├── shared/             # Shared widgets and utilities
-│   └── main.dart
-├── backend/
-│   ├── src/
-│   │   ├── routes/         # API endpoints
-│   │   ├── services/       # Business logic
-│   │   ├── ai/             # AI orchestration layer
-│   │   └── models/         # Data models
-│   └── package.json
-├── docs/                   # Documentation & architecture diagrams
-└── README.md
-```
-
----
-
-##  Roadmap
-
-### Phase 1 — Foundation *(Current)*
-- [x] Project architecture & planning
-- [ ] User authentication & onboarding
-- [ ] Skill profile creation
-- [ ] Basic dashboard UI
-
-### Phase 2 — AI Core
-- [ ] AI Career Intelligence Engine
-- [ ] Personalized roadmap generation
+### Phase 4 — AI + Projects
+- [ ] Forge AI chat screen (Claude API)
+- [ ] Personalised roadmap generation
+- [ ] Project recommendation engine
 - [ ] Skill gap analysis
-- [ ] "What's next?" assistant
 
-### Phase 3 — Engagement
-- [ ] Project Recommendation Engine
-- [ ] Internship Readiness Score
-- [ ] Progress tracking & streaks
-- [ ] Smart notification system
-
-### Phase 4 — Polish & Launch
-- [ ] Portfolio Generator
-- [ ] LinkedIn / GitHub integration
-- [ ] App Store & Play Store launch
-- [ ] Analytics & performance monitoring
+### Phase 5 — Polish + Launch
+- [ ] Portfolio generator
+- [ ] LinkedIn / GitHub export
+- [ ] App Store + Play Store submission
 
 ---
 
-##  Contributing
-
-Contributions are welcome! CareerForge is built for students, by students.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
----
-
-##  License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-##  Author
+## 👩‍💻 Author
 
 **Chamethya Yasodie**
-- GitHub:https://github.com/chamethyaY 
-- LinkedIn: https://www.linkedin.com/in/chamethya-yasodie-a8278a349/
+Full-Stack Developer · BSc Computer Science · University of Westminster (IIT Colombo)
+
+[![GitHub](https://img.shields.io/badge/GitHub-chamethyaY-181717?style=flat&logo=github)](https://github.com/chamethyaY)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Chamethya_Yasodie-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/chamethya-yasodie-a8278a349/)
+[![Email](https://img.shields.io/badge/Email-k.chamethya@gmail.com-EA4335?style=flat&logo=gmail)](mailto:k.chamethya@gmail.com)
 
 ---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by Chamethya Yasodie · CareerForge is currently in active development</sub>
+</div>
