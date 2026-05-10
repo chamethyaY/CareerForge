@@ -20,7 +20,9 @@ export function MainApp({ onSignOut }: Props) {
   const [dayStreak] = useState(12);
   const [skillsDone] = useState(18);
   const [projectsBuilt] = useState(4);
-  const [activeTab, setActiveTab] = useState<"home" | "learn" | "skills" | "chat">("home");
+  const [activeTab, setActiveTab] = useState<
+    "home" | "learn" | "skills" | "chat"
+  >("home");
   const [userName, setUserName] = useState<string>("");
   const [initials, setInitials] = useState<string>("?");
 
@@ -188,7 +190,7 @@ export function MainApp({ onSignOut }: Props) {
             </View>
             <Text style={styles.actionText}>Projects</Text>
           </TouchableOpacity>
-          </View>
+        </View>
 
         {/* AI Insights */}
         <Text style={styles.sectionTitle}>AI INSIGHTS</Text>
