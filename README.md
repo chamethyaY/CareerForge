@@ -375,21 +375,8 @@ careerforge/
 
 ##  Author
 
-**Chamethya Yasodie**
-Full-Stack Developer · BSc Computer Science · University of Westminster (IIT Colombo)
+**Chamethya Yasodie** — [GitHub](https://github.com/chamethyaY) · [LinkedIn](https://www.linkedin.com/in/chamethya-yasodie-a8278a349)
 
-[![GitHub](https://img.shields.io/badge/GitHub-chamethyaY-181717?style=flat&logo=github)](https://github.com/chamethyaY)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Chamethya_Yasodie-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/chamethya-yasodie-a8278a349/)
-[![Email](https://img.shields.io/badge/Email-k.chamethya@gmail.com-EA4335?style=flat&logo=gmail)](mailto:k.chamethya@gmail.com)
-
----
-
-## 📄 License
+##  License
 
 MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ by Chamethya Yasodie</sub>
-</div>
