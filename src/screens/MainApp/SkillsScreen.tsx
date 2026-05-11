@@ -245,7 +245,6 @@ export function SkillsScreen() {
       >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Skill Profile</Text>
-          <Text style={styles.headerSub}>Track your progress</Text>
         </View>
 
         <View style={styles.overallCard}>
@@ -262,6 +261,8 @@ export function SkillsScreen() {
             {totalDone} of {TOTAL_SKILLS} skills completed
           </Text>
         </View>
+
+        <Text style={[styles.headerSub, { paddingHorizontal: 20, marginTop: 6 }]}>Track your progress</Text>
 
         <View style={styles.legend}>
           {[
@@ -406,7 +407,7 @@ export function SkillsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0E0E12" },
-  scrollContent: { paddingBottom: 120 },
+  scrollContent: { paddingTop: 32, paddingBottom: 120 },
   loadingWrap: {
     flex: 1,
     alignItems: "center",
