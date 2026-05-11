@@ -10,7 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { supabase } from "../../services/supabase";
-import { SkillsScreen } from "./SkillsScreen";
+const SkillsScreen = require("./SkillsScreen").SkillsScreen;
 
 type Props = {
   onSignOut?: () => void;
@@ -222,36 +222,34 @@ export function MainApp({ onSignOut }: Props) {
       )}
 
       <View style={styles.bottomNavWrap}>
-        <View style={styles.bottomNav}>
-          <NavItem
-            label="Home"
-            icon="home-outline"
-            activeIcon="home"
-            active={activeTab === "home"}
-            onPress={() => setActiveTab("home")}
-          />
-          <NavItem
-            label="Learn"
-            icon="book-outline"
-            activeIcon="book"
-            active={activeTab === "learn"}
-            onPress={() => setActiveTab("learn")}
-          />
-          <NavItem
-            label="Skills"
-            icon="bar-chart-outline"
-            activeIcon="bar-chart"
-            active={activeTab === "skills"}
-            onPress={() => setActiveTab("skills")}
-          />
-          <NavItem
-            label="AI Chat"
-            icon="chatbubble-outline"
-            activeIcon="chatbubble"
-            active={activeTab === "chat"}
-            onPress={() => setActiveTab("chat")}
-          />
-        </View>
+        <NavItem
+          label="Home"
+          icon="home-outline"
+          activeIcon="home"
+          active={activeTab === "home"}
+          onPress={() => setActiveTab("home")}
+        />
+        <NavItem
+          label="Learn"
+          icon="book-outline"
+          activeIcon="book"
+          active={activeTab === "learn"}
+          onPress={() => setActiveTab("learn")}
+        />
+        <NavItem
+          label="Skills"
+          icon="bar-chart-outline"
+          activeIcon="bar-chart"
+          active={activeTab === "skills"}
+          onPress={() => setActiveTab("skills")}
+        />
+        <NavItem
+          label="AI Chat"
+          icon="chatbubble-outline"
+          activeIcon="chatbubble"
+          active={activeTab === "chat"}
+          onPress={() => setActiveTab("chat")}
+        />
       </View>
     </View>
   );
@@ -468,34 +466,23 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    paddingTop: 8,
+    paddingHorizontal: 12,
+    paddingBottom: 14,
+    paddingTop: 10,
     backgroundColor: "rgba(2, 6, 23, 0.92)",
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.06)",
-  },
-  bottomNav: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(7, 12, 28, 0.96)",
-    borderRadius: 22,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: -4 },
-    shadowRadius: 16,
-    elevation: 12,
+    justifyContent: "space-between",
+    minHeight: 86,
   },
   navItem: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    gap: 4,
+    gap: 2,
+    paddingTop: 2,
   },
   navLabel: {
     fontSize: 12,
