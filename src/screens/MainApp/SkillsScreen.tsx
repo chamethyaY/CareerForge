@@ -245,7 +245,6 @@ export function SkillsScreen() {
       >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Skill Profile</Text>
-          <Text style={styles.headerSub}>Track your progress</Text>
         </View>
 
         <View style={styles.overallCard}>
@@ -262,6 +261,12 @@ export function SkillsScreen() {
             {totalDone} of {TOTAL_SKILLS} skills completed
           </Text>
         </View>
+
+        <Text
+          style={[styles.headerSub, { paddingHorizontal: 20, marginTop: 6 }]}
+        >
+          Track your progress
+        </Text>
 
         <View style={styles.legend}>
           {[
@@ -406,7 +411,7 @@ export function SkillsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0E0E12" },
-  scrollContent: { paddingBottom: 120 },
+  scrollContent: { paddingTop: 32, paddingBottom: 120 },
   loadingWrap: {
     flex: 1,
     alignItems: "center",
@@ -422,8 +427,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#1A1A22",
   },
-  headerTitle: { fontSize: 20, fontWeight: "500", color: "#fff" },
-  headerSub: { fontSize: 12, color: "#6B6A7A", marginTop: 2 },
+  headerTitle: { fontSize: 22, fontWeight: "600", color: "#fff" },
+  headerSub: { fontSize: 14, color: "#6B6A7A", marginTop: 4 },
   overallCard: {
     backgroundColor: "#14141C",
     borderRadius: 14,
@@ -438,8 +443,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  overallLabel: { fontSize: 12, color: "#6B6A7A" },
-  overallPct: { fontSize: 16, fontWeight: "600", color: "#7F77DD" },
+  overallLabel: { fontSize: 13, color: "#6B6A7A" },
+  overallPct: { fontSize: 18, fontWeight: "600", color: "#7F77DD" },
   barTrack: {
     height: 6,
     backgroundColor: "#1A1A22",
@@ -448,7 +453,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   barFill: { height: "100%", backgroundColor: "#534AB7", borderRadius: 3 },
-  overallSub: { fontSize: 11, color: "#4A4A5A" },
+  overallSub: { fontSize: 12, color: "#4A4A5A" },
   legend: {
     flexDirection: "row",
     gap: 16,
@@ -458,8 +463,8 @@ const styles = StyleSheet.create({
   legendItem: { flexDirection: "row", alignItems: "center", gap: 5 },
   legendDot: { width: 8, height: 8, borderRadius: 4 },
   legendLabel: { fontSize: 11, color: "#6B6A7A" },
-  domainsWrap: { paddingHorizontal: 16, paddingBottom: 32, gap: 10 },
-  domainCard: { borderRadius: 14, borderWidth: 0.5, overflow: "hidden" },
+  domainsWrap: { paddingHorizontal: 16, paddingBottom: 32, gap: 16 },
+  domainCard: { borderRadius: 14, borderWidth: 0.5, overflow: "hidden", marginBottom: 12 },
   domainCardPrimary: { backgroundColor: "#14141C", borderColor: "#534AB7" },
   domainCardSecondary: {
     backgroundColor: "#0F0F16",
@@ -479,7 +484,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  domainName: { flex: 1, fontSize: 14, fontWeight: "500", color: "#fff" },
+  domainName: { flex: 1, fontSize: 16, fontWeight: "600", color: "#fff" },
   focusBadge: {
     backgroundColor: "#1C1B2E",
     borderRadius: 20,
@@ -488,8 +493,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#534AB7",
   },
-  focusBadgeText: { fontSize: 10, color: "#7F77DD", fontWeight: "500" },
-  domainPct: { fontSize: 12, fontWeight: "500" },
+  focusBadgeText: { fontSize: 12, color: "#7F77DD", fontWeight: "600" },
+  domainPct: { fontSize: 13, fontWeight: "600" },
   domainBarTrack: { height: 3, backgroundColor: "#1A1A22", overflow: "hidden" },
   domainBarFill: { height: "100%" },
   domainCount: { paddingHorizontal: 14, paddingTop: 10 },
@@ -498,10 +503,11 @@ const styles = StyleSheet.create({
   skillRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 6,
     borderRadius: 8,
     gap: 12,
+    minHeight: 48,
   },
   checkbox: {
     width: 24,
@@ -514,7 +520,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   checkboxTicked: { backgroundColor: "#1D9E75", borderColor: "#1D9E75" },
-  skillName: { flex: 1, fontSize: 13, color: "#D4D3E0" },
+  skillName: { flex: 1, fontSize: 16, color: "#D4D3E0" },
   skillNameTicked: { color: "#6B6A7A", textDecorationLine: "line-through" },
-  skillAction: { fontSize: 11, color: "#3A3A48" },
+  skillAction: { fontSize: 12, color: "#3A3A48" },
 });
