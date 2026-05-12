@@ -99,7 +99,11 @@ const ALL_DOMAINS = [
 
 const TOTAL_SKILLS = ALL_DOMAINS.reduce((acc, d) => acc + d.skills.length, 0);
 
-export function SkillsScreen() {
+type SkillsScreenProps = {
+  onOpenResources?: (skillId: string, skillName: string) => void;
+};
+
+export function SkillsScreen({ onOpenResources }: SkillsScreenProps) {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [expandedDomains, setExpandedDomains] = useState<string[]>([]);
@@ -361,42 +365,47 @@ export function SkillsScreen() {
                 {isExpanded ? (
                   <View style={styles.skillsList}>
                     {domain.skills.map((skill) => (
-                      <TouchableOpacity
-                        key={skill.id}
-                        style={styles.skillRow}
-                        onPress={() => toggleSkill(domain.id, skill.id)}
-                        activeOpacity={0.7}
-                        disabled={savingSkill === skill.id}
-                      >
-                        <View
-                          style={[
-                            styles.checkbox,
-                            skill.ticked && styles.checkboxTicked,
-                          ]}
+                      <View key={skill.id} style={{ marginBottom: 6 }}>
+                        <TouchableOpacity
+                          style={styles.skillRow}
+                          onPress={() => toggleSkill(domain.id, skill.id)}
+                          activeOpacity={0.8}
+                          disabled={savingSkill === skill.id}
                         >
-                          {savingSkill === skill.id ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                          ) : skill.ticked ? (
-                            <Ionicons name="checkmark" size={13} color="#fff" />
-                          ) : null}
-                        </View>
-                        <Text
-                          style={[
-                            styles.skillName,
-                            skill.ticked && styles.skillNameTicked,
-                          ]}
-                        >
-                          {skill.name}
-                        </Text>
-                        <Text
-                          style={[
-                            styles.skillAction,
-                            skill.ticked && { color: "#1D9E75" },
-                          ]}
-                        >
-                          {skill.ticked ? "Completed ✓" : "Mark done"}
-                        </Text>
-                      </TouchableOpacity>
+                          <View
+                            style={[
+                              styles.checkbox,
+                              skill.ticked && styles.checkboxTicked,
+                            ]}
+                          >
+                            {savingSkill === skill.id ? (
+                              <ActivityIndicator size="small" color="#fff" />
+                            ) : skill.ticked ? (
+                              <Ionicons
+                                name="checkmark"
+                                size={13}
+                                color="#fff"
+                              />
+                            ) : null}
+                          </View>
+                          <Text
+                            style={[
+                              styles.skillName,
+                              skill.ticked && styles.skillNameTicked,
+                            ]}
+                          >
+                            {skill.name}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.skillAction,
+                              skill.ticked && { color: "#1D9E75" },
+                            ]}
+                          >
+                            {skill.ticked ? "Completed ✓" : "Mark"}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     ))}
                   </View>
                 ) : null}
@@ -407,6 +416,57 @@ export function SkillsScreen() {
       </ScrollView>
     </View>
   );
+}
+
+// Helper: fetch per-domain lists (ticked / unticked) for the current user
+export async function fetchUserDomainSkillLists() {
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData?.user;
+  if (!user) return { domains: [] as Domain[] };
+
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("roles")
+    .eq("id", user.id)
+    .single();
+  const roles: string[] = profile?.roles ?? [];
+
+  const { data: progress } = await supabase
+    .from("skill_progress")
+    .select("skill_id")
+    .eq("user_id", user.id)
+    .eq("status", "done");
+  const tickedIds = new Set((progress ?? []).map((item: any) => item.skill_id));
+
+  const built: Domain[] = ALL_DOMAINS.map((domain) => ({
+    ...domain,
+    icon: domain.icon as keyof typeof Ionicons.glyphMap,
+    skills: domain.skills.map((skill) => ({
+      ...skill,
+      ticked: tickedIds.has(skill.id),
+    })),
+  }));
+
+  // ensure frontend-first ordering as requested (frontend, backend, devops, ai, ...)
+  const desiredOrder = [
+    "frontend",
+    "backend",
+    "devops",
+    "ai",
+    "mobile",
+    "fullstack",
+  ];
+
+  const ordered = [...built].sort((a, b) => {
+    const ia = desiredOrder.indexOf(a.id);
+    const ib = desiredOrder.indexOf(b.id);
+    if (ia === -1 && ib === -1) return 0;
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+  return { domains: ordered, roles };
 }
 
 const styles = StyleSheet.create({
@@ -464,7 +524,12 @@ const styles = StyleSheet.create({
   legendDot: { width: 8, height: 8, borderRadius: 4 },
   legendLabel: { fontSize: 11, color: "#6B6A7A" },
   domainsWrap: { paddingHorizontal: 16, paddingBottom: 32, gap: 16 },
-  domainCard: { borderRadius: 14, borderWidth: 0.5, overflow: "hidden", marginBottom: 12 },
+  domainCard: {
+    borderRadius: 14,
+    borderWidth: 0.5,
+    overflow: "hidden",
+    marginBottom: 12,
+  },
   domainCardPrimary: { backgroundColor: "#14141C", borderColor: "#534AB7" },
   domainCardSecondary: {
     backgroundColor: "#0F0F16",

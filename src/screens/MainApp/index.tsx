@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { supabase } from "../../services/supabase";
 const SkillsScreen = require("./SkillsScreen").SkillsScreen;
+const LearnScreen = require("./LearnScreen").default;
 
 type Props = {
   onSignOut?: () => void;
@@ -28,6 +29,10 @@ export function MainApp({ onSignOut }: Props) {
   const [initials, setInitials] = useState<string>("?");
 
   const screenWidth = Dimensions.get("window").width;
+  const [selectedSkill, setSelectedSkill] = useState<{
+    skillId: string;
+    skillName: string;
+  } | null>(null);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -111,8 +116,15 @@ export function MainApp({ onSignOut }: Props) {
 
   return (
     <View style={styles.container}>
-      {activeTab === "skills" ? (
-        <SkillsScreen />
+      {activeTab === "learn" ? (
+        <LearnScreen initialSelectedSkill={selectedSkill ?? undefined} />
+      ) : activeTab === "skills" ? (
+        <SkillsScreen
+          onOpenResources={(skillId: string, skillName: string) => {
+            setSelectedSkill({ skillId, skillName });
+            setActiveTab("learn");
+          }}
+        />
       ) : (
         <ScrollView
           contentContainerStyle={styles.scrollContent}
