@@ -99,7 +99,11 @@ const ALL_DOMAINS = [
 
 const TOTAL_SKILLS = ALL_DOMAINS.reduce((acc, d) => acc + d.skills.length, 0);
 
-export function SkillsScreen() {
+type SkillsScreenProps = {
+  onOpenResources?: (skillId: string, skillName: string) => void;
+};
+
+export function SkillsScreen({ onOpenResources }: SkillsScreenProps) {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [expandedDomains, setExpandedDomains] = useState<string[]>([]);
@@ -361,42 +365,47 @@ export function SkillsScreen() {
                 {isExpanded ? (
                   <View style={styles.skillsList}>
                     {domain.skills.map((skill) => (
-                      <TouchableOpacity
-                        key={skill.id}
-                        style={styles.skillRow}
-                        onPress={() => toggleSkill(domain.id, skill.id)}
-                        activeOpacity={0.7}
-                        disabled={savingSkill === skill.id}
-                      >
-                        <View
-                          style={[
-                            styles.checkbox,
-                            skill.ticked && styles.checkboxTicked,
-                          ]}
+                      <View key={skill.id} style={{ marginBottom: 6 }}>
+                        <TouchableOpacity
+                          style={styles.skillRow}
+                          onPress={() => toggleSkill(domain.id, skill.id)}
+                          activeOpacity={0.8}
+                          disabled={savingSkill === skill.id}
                         >
-                          {savingSkill === skill.id ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                          ) : skill.ticked ? (
-                            <Ionicons name="checkmark" size={13} color="#fff" />
-                          ) : null}
-                        </View>
-                        <Text
-                          style={[
-                            styles.skillName,
-                            skill.ticked && styles.skillNameTicked,
-                          ]}
-                        >
-                          {skill.name}
-                        </Text>
-                        <Text
-                          style={[
-                            styles.skillAction,
-                            skill.ticked && { color: "#1D9E75" },
-                          ]}
-                        >
-                          {skill.ticked ? "Completed ✓" : "Mark done"}
-                        </Text>
-                      </TouchableOpacity>
+                          <View
+                            style={[
+                              styles.checkbox,
+                              skill.ticked && styles.checkboxTicked,
+                            ]}
+                          >
+                            {savingSkill === skill.id ? (
+                              <ActivityIndicator size="small" color="#fff" />
+                            ) : skill.ticked ? (
+                              <Ionicons
+                                name="checkmark-outline"
+                                size={16}
+                                color="#fff"
+                              />
+                            ) : null}
+                          </View>
+                          <Text
+                            style={[
+                              styles.skillName,
+                              skill.ticked && styles.skillNameTicked,
+                            ]}
+                          >
+                            {skill.name}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.skillAction,
+                              skill.ticked && { color: "#1D9E75" },
+                            ]}
+                          >
+                            {skill.ticked ? "Completed ✓" : "Mark"}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     ))}
                   </View>
                 ) : null}
@@ -409,6 +418,57 @@ export function SkillsScreen() {
   );
 }
 
+// Helper: fetch per-domain lists (ticked / unticked) for the current user
+export async function fetchUserDomainSkillLists() {
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData?.user;
+  if (!user) return { domains: [] as Domain[] };
+
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("roles")
+    .eq("id", user.id)
+    .single();
+  const roles: string[] = profile?.roles ?? [];
+
+  const { data: progress } = await supabase
+    .from("skill_progress")
+    .select("skill_id")
+    .eq("user_id", user.id)
+    .eq("status", "done");
+  const tickedIds = new Set((progress ?? []).map((item: any) => item.skill_id));
+
+  const built: Domain[] = ALL_DOMAINS.map((domain) => ({
+    ...domain,
+    icon: domain.icon as keyof typeof Ionicons.glyphMap,
+    skills: domain.skills.map((skill) => ({
+      ...skill,
+      ticked: tickedIds.has(skill.id),
+    })),
+  }));
+
+  // ensure frontend-first ordering as requested (frontend, backend, devops, ai, ...)
+  const desiredOrder = [
+    "frontend",
+    "backend",
+    "devops",
+    "ai",
+    "mobile",
+    "fullstack",
+  ];
+
+  const ordered = [...built].sort((a, b) => {
+    const ia = desiredOrder.indexOf(a.id);
+    const ib = desiredOrder.indexOf(b.id);
+    if (ia === -1 && ib === -1) return 0;
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+  return { domains: ordered, roles };
+}
+
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0E0E12" },
   scrollContent: { paddingTop: 32, paddingBottom: 120 },
@@ -419,23 +479,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E0E12",
     gap: 12,
   },
-  loadingText: { fontSize: 13, color: "#6B6A7A" },
+  loadingText: { fontSize: 14, fontWeight: "400", lineHeight: 20, color: "#9CA3AF" },
   header: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 14,
+    paddingBottom: 16,
     borderBottomWidth: 0.5,
     borderBottomColor: "#1A1A22",
   },
-  headerTitle: { fontSize: 22, fontWeight: "600", color: "#fff" },
-  headerSub: { fontSize: 14, color: "#6B6A7A", marginTop: 4 },
+  headerTitle: { fontSize: 30, fontWeight: "700", color: "#fff" },
+  headerSub: { fontSize: 16, fontWeight: "400", lineHeight: 24, color: "#9CA3AF", marginTop: 4 },
   overallCard: {
-    backgroundColor: "#14141C",
-    borderRadius: 14,
-    borderWidth: 0.5,
-    borderColor: "#2A2A36",
+    backgroundColor: "#1E1E1E",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
     margin: 16,
-    padding: 14,
+    padding: 12,
   },
   overallRow: {
     flexDirection: "row",
@@ -443,7 +503,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  overallLabel: { fontSize: 13, color: "#6B6A7A" },
+  overallLabel: { fontSize: 16, fontWeight: "400", lineHeight: 24, color: "#9CA3AF" },
   overallPct: { fontSize: 18, fontWeight: "600", color: "#7F77DD" },
   barTrack: {
     height: 6,
@@ -453,66 +513,72 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   barFill: { height: "100%", backgroundColor: "#534AB7", borderRadius: 3 },
-  overallSub: { fontSize: 12, color: "#4A4A5A" },
+  overallSub: { fontSize: 12, fontWeight: "400", lineHeight: 16, color: "#9CA3AF" },
   legend: {
     flexDirection: "row",
     gap: 16,
     paddingHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 24,
   },
   legendItem: { flexDirection: "row", alignItems: "center", gap: 5 },
   legendDot: { width: 8, height: 8, borderRadius: 4 },
-  legendLabel: { fontSize: 11, color: "#6B6A7A" },
+  legendLabel: { fontSize: 12, fontWeight: "400", lineHeight: 16, color: "#9CA3AF" },
   domainsWrap: { paddingHorizontal: 16, paddingBottom: 32, gap: 16 },
-  domainCard: { borderRadius: 14, borderWidth: 0.5, overflow: "hidden", marginBottom: 12 },
-  domainCardPrimary: { backgroundColor: "#14141C", borderColor: "#534AB7" },
+  domainCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: "hidden",
+    marginBottom: 12,
+  },
+  domainCardPrimary: { backgroundColor: "#1E1E1E", borderColor: "rgba(255,255,255,0.1)" },
   domainCardSecondary: {
-    backgroundColor: "#0F0F16",
-    borderColor: "#1A1A22",
-    opacity: 0.6,
+    backgroundColor: "#1E1E1E",
+    borderColor: "rgba(255,255,255,0.1)",
+    opacity: 0.9,
   },
   domainHead: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: 16,
     gap: 10,
+    minHeight: 44,
   },
   domainIcon: {
     width: 32,
     height: 32,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
   },
-  domainName: { flex: 1, fontSize: 16, fontWeight: "600", color: "#fff" },
+  domainName: { flex: 1, fontSize: 20, fontWeight: "600", color: "#fff" },
   focusBadge: {
     backgroundColor: "#1C1B2E",
-    borderRadius: 20,
+    borderRadius: 12,
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 4,
     borderWidth: 0.5,
     borderColor: "#534AB7",
   },
-  focusBadgeText: { fontSize: 12, color: "#7F77DD", fontWeight: "600" },
-  domainPct: { fontSize: 13, fontWeight: "600" },
+  focusBadgeText: { fontSize: 12, fontWeight: "400", color: "#7F77DD" },
+  domainPct: { fontSize: 12, fontWeight: "400", color: "#9CA3AF" },
   domainBarTrack: { height: 3, backgroundColor: "#1A1A22", overflow: "hidden" },
   domainBarFill: { height: "100%" },
-  domainCount: { paddingHorizontal: 14, paddingTop: 10 },
-  domainCountText: { fontSize: 11, color: "#4A4A5A" },
-  skillsList: { padding: 10, gap: 2 },
+  domainCount: { paddingHorizontal: 16, paddingTop: 8 },
+  domainCountText: { fontSize: 12, fontWeight: "400", lineHeight: 16, color: "#9CA3AF" },
+  skillsList: { padding: 12, gap: 12 },
   skillRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 6,
-    borderRadius: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
     gap: 12,
     minHeight: 48,
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 7,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: "#3A3A48",
     alignItems: "center",
@@ -520,7 +586,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   checkboxTicked: { backgroundColor: "#1D9E75", borderColor: "#1D9E75" },
-  skillName: { flex: 1, fontSize: 16, color: "#D4D3E0" },
-  skillNameTicked: { color: "#6B6A7A", textDecorationLine: "line-through" },
-  skillAction: { fontSize: 12, color: "#3A3A48" },
+  skillName: { flex: 1, fontSize: 16, fontWeight: "500", lineHeight: 24, color: "#D4D3E0" },
+  skillNameTicked: { color: "#9CA3AF", textDecorationLine: "line-through" },
+  skillAction: { fontSize: 12, fontWeight: "400", lineHeight: 16, color: "#9CA3AF" },
 });
