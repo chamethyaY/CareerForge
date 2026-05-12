@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
     textTransform: "uppercase",
     letterSpacing: 0.6,
-    marginBottom: 16,
+    marginBottom: 8,
   },
 
   nextCard: {
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
 
   resourcesLoading: {
     alignItems: "center",
-    padding: 24,
+    padding: 12,
     gap: 8,
     backgroundColor: "#1E1E1E",
     borderRadius: 12,
@@ -526,13 +526,13 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.1)",
   },
   resourcesLoadingText: { fontSize: 14, fontWeight: "400", lineHeight: 20, color: "#9CA3AF" },
-  resourcesList: { gap: 16 },
+  resourcesList: { gap: 12 },
   resourceCard: {
     backgroundColor: "#1E1E1E",
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",
-    padding: 16,
+    padding: 12,
     minHeight: 48,
     flexDirection: "row",
     alignItems: "center",
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",
-    padding: 16,
+    padding: 12,
     alignItems: "center",
   },
   emptyText: { fontSize: 16, fontWeight: "400", lineHeight: 24, color: "#9CA3AF" },
