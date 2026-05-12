@@ -159,26 +159,782 @@ const fallbackResourceMap: Record<string, Resource[]> = {
       resource_type: "practice",
     },
   ],
+  "next.js": [
+    {
+      title: "Next.js Official Documentation",
+      url: "https://nextjs.org/docs",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Next.js by Vercel",
+      url: "https://www.youtube.com/watch?v=ZjAqacIm9iI",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Next.js Full Stack Development",
+      url: "https://www.udemy.com/course/next-js-react-the-complete-guide/",
+      provider: "Udemy",
+      resource_type: "course",
+    },
+    {
+      title: "App Router Deep Dive",
+      url: "https://nextjs.org/learn/dashboard-app",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Vercel Deployment Guide",
+      url: "https://vercel.com/docs/frameworks/nextjs",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "testing (jest)": [
+    {
+      title: "Jest Official Documentation",
+      url: "https://jestjs.io/docs/getting-started",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Testing Library Docs",
+      url: "https://testing-library.com/docs/react-testing-library/intro/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Jest Testing Tutorial",
+      url: "https://www.youtube.com/watch?v=7r4xVDgS2AI",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "React Component Testing",
+      url: "https://kentcdodds.com/blog/common-mistakes-with-react-testing-library",
+      provider: "Blog",
+      resource_type: "article",
+    },
+    {
+      title: "Mocking and Spies in Jest",
+      url: "https://jestjs.io/docs/mock-functions",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "node.js": [
+    {
+      title: "Node.js Official Docs",
+      url: "https://nodejs.org/en/docs/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Node.js Complete Course",
+      url: "https://www.youtube.com/watch?v=RLtQcCP1pEU",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Express.js Framework",
+      url: "https://expressjs.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Node.js Best Practices",
+      url: "https://github.com/goldbergyoni/nodebestpractices",
+      provider: "GitHub",
+      resource_type: "article",
+    },
+    {
+      title: "Async/Await in Node.js",
+      url: "https://nodejs.org/en/docs/guides/blocking-vs-non-blocking/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "rest apis": [
+    {
+      title: "REST API Tutorial",
+      url: "https://www.restapitutorial.com/",
+      provider: "Tutorial",
+      resource_type: "article",
+    },
+    {
+      title: "Express.js REST API",
+      url: "https://www.youtube.com/watch?v=fgTGADljAe0",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "HTTP Status Codes",
+      url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status",
+      provider: "MDN",
+      resource_type: "article",
+    },
+    {
+      title: "API Design Best Practices",
+      url: "https://restfulapi.net/",
+      provider: "RESTful API",
+      resource_type: "article",
+    },
+    {
+      title: "Building Production APIs",
+      url: "https://www.youtube.com/watch?v=0sTzMHPDMdg",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "postgresql": [
+    {
+      title: "PostgreSQL Official Docs",
+      url: "https://www.postgresql.org/docs/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "PostgreSQL Tutorial",
+      url: "https://www.postgresqltutorial.com/",
+      provider: "Tutorial",
+      resource_type: "article",
+    },
+    {
+      title: "SQL Fundamentals",
+      url: "https://www.youtube.com/watch?v=qw6uliHWFl4",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Advanced PostgreSQL",
+      url: "https://www.postgresql.org/docs/current/sql.html",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Database Indexing",
+      url: "https://use-the-index-luke.com/",
+      provider: "Performance",
+      resource_type: "article",
+    },
+  ],
+  "auth & security": [
+    {
+      title: "OWASP Top 10",
+      url: "https://owasp.org/www-project-top-ten/",
+      provider: "OWASP",
+      resource_type: "article",
+    },
+    {
+      title: "JWT Authentication",
+      url: "https://jwt.io/introduction",
+      provider: "JWT",
+      resource_type: "article",
+    },
+    {
+      title: "OAuth 2.0 Explained",
+      url: "https://www.youtube.com/watch?v=ZV7cmnSCrwc",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Password Security",
+      url: "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+      provider: "OWASP",
+      resource_type: "article",
+    },
+    {
+      title: "API Security",
+      url: "https://owasp.org/www-project-api-security/",
+      provider: "OWASP",
+      resource_type: "article",
+    },
+  ],
+  "graphql": [
+    {
+      title: "GraphQL Official Site",
+      url: "https://graphql.org/learn/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Apollo Server",
+      url: "https://www.apollographql.com/docs/apollo-server/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "GraphQL Full Course",
+      url: "https://www.youtube.com/watch?v=ed8SzALN2x0",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "GraphQL vs REST",
+      url: "https://blog.apollographql.com/graphql-vs-rest-5d425123e34b",
+      provider: "Blog",
+      resource_type: "article",
+    },
+    {
+      title: "Query Language Basics",
+      url: "https://www.howtographql.com/",
+      provider: "Tutorial",
+      resource_type: "article",
+    },
+  ],
+  "react native": [
+    {
+      title: "React Native Official Docs",
+      url: "https://reactnative.dev/docs/getting-started",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "React Native Complete Course",
+      url: "https://www.youtube.com/watch?v=ur6I5GQvWQA",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "React Native Navigation",
+      url: "https://reactnavigation.org/docs/getting-started",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Mobile App Performance",
+      url: "https://reactnative.dev/docs/performance",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Native Modules",
+      url: "https://reactnative.dev/docs/native-modules-intro",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "expo": [
+    {
+      title: "Expo Documentation",
+      url: "https://docs.expo.dev/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Expo CLI Guide",
+      url: "https://docs.expo.dev/workflow/expo-cli/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Building with Expo",
+      url: "https://www.youtube.com/watch?v=XatXRluWBtw",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Expo Go App",
+      url: "https://docs.expo.dev/get-started/installation/#2-install-expo-go",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "EAS Build & Submit",
+      url: "https://docs.expo.dev/build/introduction/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "navigation": [
+    {
+      title: "React Navigation Docs",
+      url: "https://reactnavigation.org/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Stack Navigation",
+      url: "https://reactnavigation.org/docs/stack-navigator",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Tab Navigation",
+      url: "https://reactnavigation.org/docs/bottom-tab-navigator",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Deep Linking",
+      url: "https://reactnavigation.org/docs/deep-linking",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "React Navigation Advanced",
+      url: "https://www.youtube.com/watch?v=IvRX7SZgSGE",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "native apis": [
+    {
+      title: "React Native APIs",
+      url: "https://reactnative.dev/docs/apis/alert",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Camera API",
+      url: "https://docs.expo.dev/versions/latest/sdk/camera/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Geolocation",
+      url: "https://docs.expo.dev/versions/latest/sdk/location/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "File System",
+      url: "https://docs.expo.dev/versions/latest/sdk/filesystem/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Device Hardware",
+      url: "https://docs.expo.dev/versions/latest/sdk/sensors/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+  ],
+  "push notifications": [
+    {
+      title: "Expo Push Notifications",
+      url: "https://docs.expo.dev/push-notifications/overview/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Setting Up Push Notifications",
+      url: "https://docs.expo.dev/push-notifications/setup/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Firebase Cloud Messaging",
+      url: "https://firebase.google.com/docs/cloud-messaging",
+      provider: "Firebase",
+      resource_type: "article",
+    },
+    {
+      title: "Local Notifications",
+      url: "https://docs.expo.dev/versions/latest/sdk/notifications/",
+      provider: "Expo Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Push Notification Best Practices",
+      url: "https://www.youtube.com/watch?v=sioEY4tWmLI",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "git & github": [
+    {
+      title: "Git Official Documentation",
+      url: "https://git-scm.com/doc",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "GitHub Docs",
+      url: "https://docs.github.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Git Complete Tutorial",
+      url: "https://www.youtube.com/watch?v=RGOj5yH7evk",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Branching Strategy",
+      url: "https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Pull Requests",
+      url: "https://docs.github.com/en/pull-requests",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "docker": [
+    {
+      title: "Docker Official Docs",
+      url: "https://docs.docker.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Docker Complete Course",
+      url: "https://www.youtube.com/watch?v=fqMOX6JJhGo",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Docker Hub",
+      url: "https://hub.docker.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Dockerfile Best Practices",
+      url: "https://docs.docker.com/engine/reference/builder/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Docker Compose",
+      url: "https://docs.docker.com/compose/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "ci/cd": [
+    {
+      title: "GitHub Actions Docs",
+      url: "https://docs.github.com/en/actions",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "CI/CD Fundamentals",
+      url: "https://www.youtube.com/watch?v=M4CXiYiIIF0",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "GitLab CI/CD",
+      url: "https://docs.gitlab.com/ee/ci/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Jenkins",
+      url: "https://www.jenkins.io/doc/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Automated Testing & Deployment",
+      url: "https://www.youtube.com/watch?v=xSQUIxUyUPw",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "aws basics": [
+    {
+      title: "AWS Documentation",
+      url: "https://docs.aws.amazon.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "AWS Free Tier",
+      url: "https://aws.amazon.com/free/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "AWS for Beginners",
+      url: "https://www.youtube.com/watch?v=ZzW9NTZcr7E",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "EC2, S3, and RDS",
+      url: "https://docs.aws.amazon.com/index.html",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "AWS Lambda",
+      url: "https://docs.aws.amazon.com/lambda/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "python for ml": [
+    {
+      title: "Python Official Docs",
+      url: "https://docs.python.org/3/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "NumPy & Pandas",
+      url: "https://www.youtube.com/watch?v=r-uOLxkrihE",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Scikit-Learn",
+      url: "https://scikit-learn.org/stable/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Machine Learning with Python",
+      url: "https://www.coursera.org/learn/machine-learning-python",
+      provider: "Coursera",
+      resource_type: "course",
+    },
+    {
+      title: "Data Science Handbook",
+      url: "https://jakevdp.github.io/PythonDataScienceHandbook/",
+      provider: "Book",
+      resource_type: "article",
+    },
+  ],
+  "llm apis": [
+    {
+      title: "OpenAI API Docs",
+      url: "https://platform.openai.com/docs",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Google Gemini API",
+      url: "https://ai.google.dev/docs",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "LLM Integration Guide",
+      url: "https://www.youtube.com/watch?v=HN-LPgEFPxU",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "LangChain Framework",
+      url: "https://js.langchain.com/docs/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Anthropic Claude API",
+      url: "https://docs.anthropic.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+  ],
+  "prompt engineering": [
+    {
+      title: "Prompt Engineering Guide",
+      url: "https://www.promptingguide.ai/",
+      provider: "Guide",
+      resource_type: "article",
+    },
+    {
+      title: "OpenAI Prompt Engineering",
+      url: "https://platform.openai.com/docs/guides/prompt-engineering",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Chain of Thought Prompting",
+      url: "https://www.youtube.com/watch?v=_ZvnEKVjgZ0",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Advanced Techniques",
+      url: "https://learnprompting.org/",
+      provider: "Tutorial",
+      resource_type: "article",
+    },
+    {
+      title: "Few-Shot Learning",
+      url: "https://www.youtube.com/watch?v=5qLMqf1PfmE",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "ml models": [
+    {
+      title: "TensorFlow Docs",
+      url: "https://www.tensorflow.org/learn",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "PyTorch Tutorials",
+      url: "https://pytorch.org/tutorials/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Deep Learning Fundamentals",
+      url: "https://www.youtube.com/watch?v=S75EdAwhQFU",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Neural Networks",
+      url: "https://www.deeplearningbook.org/",
+      provider: "Book",
+      resource_type: "article",
+    },
+    {
+      title: "Model Training & Evaluation",
+      url: "https://www.coursera.org/specializations/machine-learning-engineering-for-production",
+      provider: "Coursera",
+      resource_type: "course",
+    },
+  ],
+  "mvc architecture": [
+    {
+      title: "MVC Pattern Explained",
+      url: "https://www.youtube.com/watch?v=1IsL6g2aPww",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "MVC in Web Development",
+      url: "https://developer.mozilla.org/en-US/docs/Glossary/MVC",
+      provider: "MDN",
+      resource_type: "article",
+    },
+    {
+      title: "Express.js MVC",
+      url: "https://www.youtube.com/watch?v=nVzrHrr_cpp",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Design Patterns",
+      url: "https://refactoring.guru/design-patterns",
+      provider: "Guide",
+      resource_type: "article",
+    },
+    {
+      title: "Clean Code Architecture",
+      url: "https://www.youtube.com/watch?v=o_TH-Y78tt4",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
+  "api design": [
+    {
+      title: "API Design Best Practices",
+      url: "https://restfulapi.net/",
+      provider: "Guide",
+      resource_type: "article",
+    },
+    {
+      title: "OpenAPI Specification",
+      url: "https://spec.openapis.org/oas/v3.0.3",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "API Security",
+      url: "https://owasp.org/www-project-api-security/",
+      provider: "OWASP",
+      resource_type: "article",
+    },
+    {
+      title: "Versioning Strategies",
+      url: "https://www.youtube.com/watch?v=x0OxqhFJXn4",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Rate Limiting & Throttling",
+      url: "https://cloud.google.com/architecture/rate-limiting-strategies-techniques",
+      provider: "Article",
+      resource_type: "article",
+    },
+  ],
+  "deployment": [
+    {
+      title: "Deployment Basics",
+      url: "https://www.youtube.com/watch?v=SMUV1JCB9hE",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Vercel Deployment",
+      url: "https://vercel.com/docs",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Heroku Deployment",
+      url: "https://devcenter.heroku.com/",
+      provider: "Official Docs",
+      resource_type: "article",
+    },
+    {
+      title: "Server Configuration",
+      url: "https://www.youtube.com/watch?v=l-sSJbsIkT8",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+    {
+      title: "Monitoring & Logging",
+      url: "https://www.youtube.com/watch?v=Sva0GWfJaB8",
+      provider: "YouTube",
+      resource_type: "video",
+    },
+  ],
 };
 
 function getFallbackResources(skillName: string): Resource[] {
   const normalized = skillName.toLowerCase().trim();
-  const exact = fallbackResourceMap[normalized];
-  if (exact) return exact;
-
-  if (normalized.includes("html") || normalized.includes("css")) {
-    return fallbackResourceMap["html / css"];
+  
+  // Direct key match first
+  if (fallbackResourceMap[normalized]) {
+    return fallbackResourceMap[normalized];
   }
-  if (normalized.includes("javascript") || normalized === "js") {
-    return fallbackResourceMap.javascript;
-  }
-  if (normalized.includes("react")) {
-    return fallbackResourceMap.react;
-  }
-  if (normalized.includes("typescript") || normalized === "ts") {
-    return fallbackResourceMap.typescript;
-  }
-
+  
+  // Partial matching for common variations
+  if (normalized.includes("html") || normalized.includes("css")) return fallbackResourceMap["html / css"];
+  if (normalized.includes("javascript") || normalized === "js") return fallbackResourceMap.javascript;
+  if (normalized.includes("react") && !normalized.includes("native")) return fallbackResourceMap.react;
+  if (normalized.includes("typescript") || normalized === "ts") return fallbackResourceMap.typescript;
+  if (normalized.includes("next") || normalized.includes("nextjs")) return fallbackResourceMap["next.js"];
+  if (normalized.includes("jest") || normalized.includes("testing")) return fallbackResourceMap["testing (jest)"];
+  if (normalized.includes("node")) return fallbackResourceMap["node.js"];
+  if (normalized.includes("rest") || (normalized.includes("api") && !normalized.includes("native"))) return fallbackResourceMap["rest apis"];
+  if (normalized.includes("postgres") || normalized.includes("sql")) return fallbackResourceMap.postgresql;
+  if (normalized.includes("auth") || normalized.includes("security")) return fallbackResourceMap["auth & security"];
+  if (normalized.includes("graphql")) return fallbackResourceMap.graphql;
+  if (normalized.includes("react native")) return fallbackResourceMap["react native"];
+  if (normalized.includes("expo")) return fallbackResourceMap.expo;
+  if (normalized.includes("navigation")) return fallbackResourceMap.navigation;
+  if (normalized.includes("native") || normalized.includes("device")) return fallbackResourceMap["native apis"];
+  if (normalized.includes("push") || normalized.includes("notification")) return fallbackResourceMap["push notifications"];
+  if (normalized.includes("git") || normalized.includes("github")) return fallbackResourceMap["git & github"];
+  if (normalized.includes("docker")) return fallbackResourceMap.docker;
+  if (normalized.includes("ci") || normalized.includes("cd")) return fallbackResourceMap["ci/cd"];
+  if (normalized.includes("aws")) return fallbackResourceMap["aws basics"];
+  if (normalized.includes("python")) return fallbackResourceMap["python for ml"];
+  if (normalized.includes("llm")) return fallbackResourceMap["llm apis"];
+  if (normalized.includes("prompt")) return fallbackResourceMap["prompt engineering"];
+  if (normalized.includes("ml") || normalized.includes("model")) return fallbackResourceMap["ml models"];
+  if (normalized.includes("mvc")) return fallbackResourceMap["mvc architecture"];
+  if (normalized.includes("design")) return fallbackResourceMap["api design"];
+  if (normalized.includes("deploy")) return fallbackResourceMap.deployment;
+  
+  console.warn(`⚠️ No specific fallback for skill: ${skillName}, using JavaScript as default`);
   return fallbackResourceMap.javascript;
 }
 
@@ -381,7 +1137,7 @@ export async function getResources({
   userLevel = "beginner",
   userGoal = "skills",
 }: GetResourcesArgs): Promise<Resource[]> {
-  console.log(`📚 getResources called for skill: ${skillId}`);
+  console.log(`📚 getResources called for skill: ${skillId} (${skillName})`);
   const { data: cachedResources, error: cacheError } = await supabase
     .from("skill_resources")
     .select("title,url,provider,resource_type")
@@ -392,11 +1148,13 @@ export async function getResources({
   }
 
   if (cachedResources && cachedResources.length > 0) {
-    console.log(`✅ Found ${cachedResources.length} cached resources`);
+    console.log(
+      `✅ Found ${cachedResources.length} cached resources for ${skillId}`,
+    );
     return (cachedResources as DbResourceRow[]).map(normalizeResource);
   }
 
-  console.log("⏳ No cached resources, trying edge function...");
+  console.log(`⏳ No cached resources for ${skillId}, trying edge function...`);
 
   try {
     const { data, error } = await supabase.functions.invoke(
@@ -412,23 +1170,26 @@ export async function getResources({
     );
 
     if (error) {
+      console.error(`❌ Edge function error for ${skillId}:`, error);
       throw error;
     }
 
     const rows = (data?.resources ?? data ?? []) as DbResourceRow[];
-    console.log(`✅ Edge function returned ${rows.length} resources`);
+    console.log(
+      `✅ Edge function returned ${rows.length} resources for ${skillId}`,
+    );
     const normalized = rows.map(normalizeResource).filter((row) => row.url);
     if (normalized.length > 0) {
       return normalized;
     }
   } catch (edgeError) {
     console.warn(
-      "Edge function failed, falling back to local resources:",
+      `⚠️ Edge function failed for ${skillId}, falling back:`,
       edgeError,
     );
   }
 
-  console.log("🎯 Using local fallback resources...");
+  console.log(`🎯 Using local fallback resources for ${skillId}...`);
   return getFallbackResources(skillName);
 }
 
