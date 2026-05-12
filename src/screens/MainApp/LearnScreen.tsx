@@ -19,11 +19,7 @@ import { fetchUserDomainSkillLists } from "./SkillsScreen";
 
 // LearnScreen uses canonical domain/skill data from SkillsScreen
 
-export default function LearnScreen({
-  initialSkill,
-}: {
-  initialSkill?: { id: string; name: string } | null;
-}) {
+export default function LearnScreen() {
   const [profile, setProfile] = useState<any>(null);
   const [tickedIds, setTickedIds] = useState<Set<string>>(new Set());
   const [userRoles, setUserRoles] = useState<string[]>([]);
@@ -46,12 +42,6 @@ export default function LearnScreen({
   useEffect(() => {
     void loadData();
   }, []);
-
-  useEffect(() => {
-    if (initialSkill && profile) {
-      void loadResourcesForSkill(initialSkill.id, initialSkill.name, profile);
-    }
-  }, [initialSkill, profile]);
 
   const loadData = async () => {
     const {
@@ -124,9 +114,7 @@ export default function LearnScreen({
     } catch (error) {
       const err = error instanceof Error ? error.message : String(error);
       console.error("Failed to load resources:", err);
-      setResourcesError(
-        `Resource load failed: ${err}`,
-      );
+      setResourcesError(`Resource load failed: ${err}`);
     } finally {
       setLoadingResources(false);
     }
@@ -451,7 +439,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E0E12",
     gap: 16,
   },
-  loadingText: { fontSize: 14, fontWeight: "400", lineHeight: 20, color: "#9CA3AF" },
+  loadingText: {
+    fontSize: 14,
+    fontWeight: "400",
+    lineHeight: 20,
+    color: "#9CA3AF",
+  },
   header: {
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -524,7 +517,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  btnPrimaryText: { fontSize: 15, fontWeight: "600", lineHeight: 20, color: "#EEEDFE" },
+  btnPrimaryText: {
+    fontSize: 15,
+    fontWeight: "600",
+    lineHeight: 20,
+    color: "#EEEDFE",
+  },
 
   resourcesLoading: {
     alignItems: "center",
@@ -535,7 +533,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",
   },
-  resourcesLoadingText: { fontSize: 14, fontWeight: "400", lineHeight: 20, color: "#9CA3AF" },
+  resourcesLoadingText: {
+    fontSize: 14,
+    fontWeight: "400",
+    lineHeight: 20,
+    color: "#9CA3AF",
+  },
   resourcesList: { gap: 12 },
   resourceCard: {
     backgroundColor: "#1E1E1E",
@@ -569,9 +572,19 @@ const styles = StyleSheet.create({
     gap: 8,
     flexWrap: "wrap",
   },
-  resProvider: { fontSize: 13, fontWeight: "500", lineHeight: 18, color: "#9CA3AF" },
+  resProvider: {
+    fontSize: 13,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: "#9CA3AF",
+  },
   resDot: { fontSize: 13, fontWeight: "400", lineHeight: 18, color: "#9CA3AF" },
-  resType: { fontSize: 13, fontWeight: "500", lineHeight: 18, color: "#9CA3AF" },
+  resType: {
+    fontSize: 13,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: "#9CA3AF",
+  },
   resFree: {
     backgroundColor: "#E1F5EE20",
     borderRadius: 20,
@@ -579,7 +592,12 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     marginLeft: 8,
   },
-  resFreeText: { fontSize: 12, fontWeight: "500", lineHeight: 16, color: "#1D9E75" },
+  resFreeText: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 16,
+    color: "#1D9E75",
+  },
   emptyBox: {
     backgroundColor: "#1E1E1E",
     borderRadius: 12,
@@ -588,7 +606,12 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
   },
-  emptyText: { fontSize: 16, fontWeight: "400", lineHeight: 24, color: "#9CA3AF" },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: "400",
+    lineHeight: 24,
+    color: "#9CA3AF",
+  },
 
   domainCard: {
     borderRadius: 12,
@@ -596,7 +619,10 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 16,
   },
-  domainPrimary: { backgroundColor: "#1E1E1E", borderColor: "rgba(255,255,255,0.1)" },
+  domainPrimary: {
+    backgroundColor: "#1E1E1E",
+    borderColor: "rgba(255,255,255,0.1)",
+  },
   domainSecondary: {
     backgroundColor: "#1E1E1E",
     borderColor: "rgba(255,255,255,0.1)",
@@ -618,8 +644,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#534AB7",
   },
-  focusBadgeText: { fontSize: 12, lineHeight: 16, color: "#7F77DD", fontWeight: "500" },
-  domainPct: { fontSize: 14, lineHeight: 20, fontWeight: "500", color: "#9CA3AF" },
+  focusBadgeText: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: "#7F77DD",
+    fontWeight: "500",
+  },
+  domainPct: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "500",
+    color: "#9CA3AF",
+  },
   domainBarTrack: { height: 2, backgroundColor: "#1A1A22", overflow: "hidden" },
   domainBarFill: { height: "100%" },
 
@@ -655,5 +691,10 @@ const styles = StyleSheet.create({
   },
   skillNameDone: { color: "#6B6A7A", textDecorationLine: "line-through" },
   skillNameCurrent: { color: "#fff", fontWeight: "500" },
-  skillAction: { fontSize: 13, fontWeight: "500", lineHeight: 18, color: "#9CA3AF" },
+  skillAction: {
+    fontSize: 13,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: "#9CA3AF",
+  },
 });

@@ -368,11 +368,7 @@ export function SkillsScreen({ onOpenResources }: SkillsScreenProps) {
                       <View key={skill.id} style={{ marginBottom: 6 }}>
                         <TouchableOpacity
                           style={styles.skillRow}
-                          onPress={() =>
-                            onOpenResources
-                              ? onOpenResources(skill.id, skill.name)
-                              : toggleSkill(domain.id, skill.id)
-                          }
+                          onPress={() => toggleSkill(domain.id, skill.id)}
                           activeOpacity={0.8}
                           disabled={savingSkill === skill.id}
                         >
