@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E0E12",
     gap: 12,
   },
-  loadingText: { fontSize: 13, color: "#6B6A7A" },
+  loadingText: { fontSize: 14, fontWeight: "400", color: "#6B6A7A" },
   header: {
     paddingHorizontal: 20,
     paddingTop: 16,
@@ -445,12 +445,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#1A1A22",
   },
-  headerTitle: { fontSize: 20, fontWeight: "500", color: "#fff" },
-  headerSub: { fontSize: 12, color: "#6B6A7A", marginTop: 2 },
+  headerTitle: { fontSize: 30, fontWeight: "700", color: "#fff" },
+  headerSub: { fontSize: 16, fontWeight: "400", color: "#6B6A7A", marginTop: 4 },
 
   section: { paddingHorizontal: 16, marginTop: 16 },
   sectionLabel: {
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: "500",
     color: "#4A4A5A",
     textTransform: "uppercase",
@@ -479,13 +479,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   nextDomain: {
-    fontSize: 10,
+    fontSize: 13,
     color: "#7F77DD",
     fontWeight: "500",
     marginBottom: 2,
   },
-  nextName: { fontSize: 16, fontWeight: "500", color: "#fff" },
-  nextSub: { fontSize: 12, color: "#9A99A8", lineHeight: 18, marginBottom: 12 },
+  nextName: { fontSize: 20, fontWeight: "600", color: "#fff" },
+  nextSub: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: "#9A99A8",
+    lineHeight: 24,
+    marginBottom: 12,
+  },
   nextBtnRow: { flexDirection: "row", gap: 8 },
   btnPrimary: {
     backgroundColor: "#534AB7",
@@ -493,7 +499,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
   },
-  btnPrimaryText: { fontSize: 13, fontWeight: "500", color: "#EEEDFE" },
+  btnPrimaryText: { fontSize: 15, fontWeight: "600", color: "#EEEDFE" },
 
   resourcesLoading: {
     alignItems: "center",
@@ -504,7 +510,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#2A2A36",
   },
-  resourcesLoadingText: { fontSize: 12, color: "#6B6A7A" },
+  resourcesLoadingText: { fontSize: 14, fontWeight: "400", color: "#6B6A7A" },
   resourcesList: { gap: 8 },
   resourceCard: {
     backgroundColor: "#14141C",
@@ -525,8 +531,8 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   resTitle: {
-    fontSize: 12,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "400",
     color: "#D4D3E0",
     marginBottom: 4,
   },
@@ -536,9 +542,9 @@ const styles = StyleSheet.create({
     gap: 4,
     flexWrap: "wrap",
   },
-  resProvider: { fontSize: 10, color: "#6B6A7A" },
-  resDot: { fontSize: 10, color: "#4A4A5A" },
-  resType: { fontSize: 10, color: "#6B6A7A" },
+  resProvider: { fontSize: 13, fontWeight: "500", color: "#6B6A7A" },
+  resDot: { fontSize: 13, fontWeight: "400", color: "#4A4A5A" },
+  resType: { fontSize: 13, fontWeight: "500", color: "#6B6A7A" },
   resFree: {
     backgroundColor: "#E1F5EE20",
     borderRadius: 20,
@@ -546,7 +552,7 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     marginLeft: 4,
   },
-  resFreeText: { fontSize: 9, color: "#1D9E75" },
+  resFreeText: { fontSize: 12, fontWeight: "500", color: "#1D9E75" },
   emptyBox: {
     backgroundColor: "#14141C",
     borderRadius: 12,
@@ -555,7 +561,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
   },
-  emptyText: { fontSize: 12, color: "#4A4A5A" },
+  emptyText: { fontSize: 16, fontWeight: "400", color: "#4A4A5A" },
 
   domainCard: {
     borderRadius: 12,
@@ -576,7 +582,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   domainDot: { width: 8, height: 8, borderRadius: 4, flexShrink: 0 },
-  domainName: { flex: 1, fontSize: 13, fontWeight: "500", color: "#fff" },
+  domainName: { flex: 1, fontSize: 18, fontWeight: "600", color: "#fff" },
   focusBadge: {
     backgroundColor: "#1C1B2E",
     borderRadius: 20,
@@ -585,8 +591,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#534AB7",
   },
-  focusBadgeText: { fontSize: 10, color: "#7F77DD", fontWeight: "500" },
-  domainPct: { fontSize: 12, fontWeight: "500" },
+  focusBadgeText: { fontSize: 12, color: "#7F77DD", fontWeight: "500" },
+  domainPct: { fontSize: 14, fontWeight: "500" },
   domainBarTrack: { height: 2, backgroundColor: "#1A1A22", overflow: "hidden" },
   domainBarFill: { height: "100%" },
 
@@ -611,8 +617,8 @@ const styles = StyleSheet.create({
   },
   skillDotDone: { backgroundColor: "#1D9E75", borderColor: "#1D9E75" },
   skillDotCurrent: { backgroundColor: "#534AB7", borderColor: "#534AB7" },
-  skillName: { flex: 1, fontSize: 12, color: "#9A99A8" },
+  skillName: { flex: 1, fontSize: 18, fontWeight: "600", color: "#9A99A8" },
   skillNameDone: { color: "#6B6A7A", textDecorationLine: "line-through" },
   skillNameCurrent: { color: "#fff", fontWeight: "500" },
-  skillAction: { fontSize: 10, color: "#3A3A48" },
+  skillAction: { fontSize: 13, fontWeight: "500", color: "#3A3A48" },
 });
