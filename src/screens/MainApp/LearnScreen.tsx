@@ -431,7 +431,7 @@ export default function LearnScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0E0E12" },
-  scrollContent: { paddingBottom: 88 },
+  scrollContent: { paddingTop: 32, paddingBottom: 120 },
   loadingWrap: {
     flex: 1,
     alignItems: "center",
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
   },
   header: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: 16,
     borderBottomWidth: 0.5,
@@ -458,13 +458,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 24,
     color: "#9CA3AF",
-    marginTop: 8,
+    marginTop: 4,
   },
 
   section: { paddingHorizontal: 16, marginTop: 24 },
   sectionLabel: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: "400",
     lineHeight: 16,
     color: "#9CA3AF",
     textTransform: "uppercase",
@@ -632,10 +632,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
-    gap: 8,
+    gap: 10,
+    minHeight: 44,
   },
   domainDot: { width: 8, height: 8, borderRadius: 4, flexShrink: 0 },
-  domainName: { flex: 1, fontSize: 18, fontWeight: "600", color: "#fff" },
+  domainName: { flex: 1, fontSize: 20, fontWeight: "600", color: "#fff" },
   focusBadge: {
     backgroundColor: "#1C1B2E",
     borderRadius: 20,
@@ -659,15 +660,15 @@ const styles = StyleSheet.create({
   domainBarTrack: { height: 2, backgroundColor: "#1A1A22", overflow: "hidden" },
   domainBarFill: { height: "100%" },
 
-  skillsList: { padding: 16, gap: 8 },
+  skillsList: { padding: 12, gap: 12 },
   skillRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    gap: 12,
     minHeight: 48,
-    borderRadius: 8,
-    gap: 8,
   },
   skillRowActive: { backgroundColor: "#1C1B2E" },
   skillDot: {
@@ -684,17 +685,17 @@ const styles = StyleSheet.create({
   skillDotCurrent: { backgroundColor: "#534AB7", borderColor: "#534AB7" },
   skillName: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "500",
     lineHeight: 24,
-    color: "#9CA3AF",
+    color: "#D4D3E0",
   },
-  skillNameDone: { color: "#6B6A7A", textDecorationLine: "line-through" },
+  skillNameDone: { color: "#9CA3AF", textDecorationLine: "line-through" },
   skillNameCurrent: { color: "#fff", fontWeight: "500" },
   skillAction: {
-    fontSize: 13,
-    fontWeight: "500",
-    lineHeight: 18,
+    fontSize: 12,
+    fontWeight: "400",
+    lineHeight: 16,
     color: "#9CA3AF",
   },
 });

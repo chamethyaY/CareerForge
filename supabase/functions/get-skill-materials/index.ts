@@ -193,15 +193,11 @@ Return ONLY a valid JSON array of objects with keys: title, url, resource_type, 
     console.log(
       `✅ Successfully saved ${resources.length} resources for ${skillId}`,
     );
-<<<<<<< HEAD
     return jsonResponse({
       skill_id: skillId,
       skill_name: skillName,
       resources,
     });
-=======
-    return jsonResponse({ skill_id: skillId, skill_name: skillName, resources });
->>>>>>> 5b959499a86a97056d8471cbcafb8248030f15ce
   } catch (err) {
     console.error("❌ UNHANDLED ERROR:", err);
     return jsonResponse(
