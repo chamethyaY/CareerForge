@@ -10,6 +10,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { supabase } from "../../services/supabase";
+import LearnScreen from "./LearnScreen";
+import { SkillsScreen } from "./SkillsScreen";
 
 type Props = {
   onSignOut?: () => void;
@@ -23,6 +25,9 @@ export function MainApp({ onSignOut }: Props) {
   const [activeTab, setActiveTab] = useState<
     "home" | "learn" | "skills" | "chat"
   >("home");
+  const [selectedSkillForLearn, setSelectedSkillForLearn] = useState<
+    { id: string; name: string } | null
+  >(null);
   const [userName, setUserName] = useState<string>("");
   const [initials, setInitials] = useState<string>("?");
 
@@ -110,108 +115,133 @@ export function MainApp({ onSignOut }: Props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.greetingText}>{getGreeting()}</Text>
-            <Text style={styles.userName}>{userName || "Welcome"}</Text>
-          </View>
-          <TouchableOpacity onPress={onSignOut}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{initials}</Text>
+      {activeTab === "home" && (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Text style={styles.greetingText}>{getGreeting()}</Text>
+              <Text style={styles.userName}>{userName || "Welcome"}</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Internship Readiness */}
-        <View style={styles.readinessCard}>
-          <Text style={styles.readinessLabel}>Internship readiness</Text>
-          <View style={styles.readinessTitleRow}>
-            <Text style={styles.readinessTitle}>Keep it up!</Text>
-            <Text style={styles.readinessPercent}>{internshipProgress}%</Text>
-          </View>
-          <View style={styles.progressBarBackground}>
-            <LinearGradient
-              colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={[styles.progressBar, { width: `${internshipProgress}%` }]}
-            />
-          </View>
-        </View>
-
-        {/* Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Ionicons name="flame" size={20} color="#7B6CF6" />
-            <Text style={styles.statNumber}>{dayStreak}</Text>
-            <Text style={styles.statLabel}>day streak</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Ionicons name="checkmark-circle" size={20} color="#2EC6C6" />
-            <Text style={styles.statNumber}>{skillsDone}</Text>
-            <Text style={styles.statLabel}>skills done</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Ionicons name="bulb" size={20} color="#C86DD7" />
-            <Text style={styles.statNumber}>{projectsBuilt}</Text>
-            <Text style={styles.statLabel}>projects built</Text>
-          </View>
-        </View>
-
-        {/* Quick Actions */}
-        <Text style={styles.sectionTitle}>QUICK ACTIONS</Text>
-        <View style={styles.actionsGrid}>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIconBox}>
-              <Ionicons name="book" size={24} color="#7B6CF6" />
-            </View>
-            <Text style={styles.actionText}>Continue Learning</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIconBox}>
-              <Ionicons name="map" size={24} color="#2EC6C6" />
-            </View>
-            <Text style={styles.actionText}>View Roadmap</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIconBox}>
-              <Ionicons name="chatbubble" size={24} color="#C86DD7" />
-            </View>
-            <Text style={styles.actionText}>Chat with AI</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={styles.actionIconBox}>
-              <Ionicons name="folder" size={24} color="#F77F00" />
-            </View>
-            <Text style={styles.actionText}>Projects</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* AI Insights */}
-        <Text style={styles.sectionTitle}>AI INSIGHTS</Text>
-        <View style={styles.insightCard}>
-          <View style={styles.insightIconBox}>
-            <Ionicons name="sparkles" size={20} color="#7B6CF6" />
-          </View>
-          <View style={styles.insightContent}>
-            <Text style={styles.insightText}>
-              Based on your progress, focus on{" "}
-              <Text style={styles.insightHighlight}>
-                TypeScript and React Testing
-              </Text>{" "}
-              to boost your readiness by 15%.
-            </Text>
-            <TouchableOpacity>
-              <Text style={styles.insightLink}>View details →</Text>
+            <TouchableOpacity onPress={onSignOut}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>{initials}</Text>
+              </View>
             </TouchableOpacity>
           </View>
+
+          {/* Internship Readiness */}
+          <View style={styles.readinessCard}>
+            <Text style={styles.readinessLabel}>Internship readiness</Text>
+            <View style={styles.readinessTitleRow}>
+              <Text style={styles.readinessTitle}>Keep it up!</Text>
+              <Text style={styles.readinessPercent}>{internshipProgress}%</Text>
+            </View>
+            <View style={styles.progressBarBackground}>
+              <LinearGradient
+                colors={["#7B6CF6", "#C86DD7", "#2EC6C6"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[styles.progressBar, { width: `${internshipProgress}%` }]}
+              />
+            </View>
+          </View>
+
+          {/* Stats */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statCard}>
+              <Ionicons name="flame" size={20} color="#7B6CF6" />
+              <Text style={styles.statNumber}>{dayStreak}</Text>
+              <Text style={styles.statLabel}>day streak</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Ionicons name="checkmark-circle" size={20} color="#2EC6C6" />
+              <Text style={styles.statNumber}>{skillsDone}</Text>
+              <Text style={styles.statLabel}>skills done</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Ionicons name="bulb" size={20} color="#C86DD7" />
+              <Text style={styles.statNumber}>{projectsBuilt}</Text>
+              <Text style={styles.statLabel}>projects built</Text>
+            </View>
+          </View>
+
+          {/* Quick Actions */}
+          <Text style={styles.sectionTitle}>QUICK ACTIONS</Text>
+          <View style={styles.actionsGrid}>
+            <TouchableOpacity style={styles.actionCard}>
+              <View style={styles.actionIconBox}>
+                <Ionicons name="book" size={24} color="#7B6CF6" />
+              </View>
+              <Text style={styles.actionText}>Continue Learning</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionCard}>
+              <View style={styles.actionIconBox}>
+                <Ionicons name="map" size={24} color="#2EC6C6" />
+              </View>
+              <Text style={styles.actionText}>View Roadmap</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionCard}>
+              <View style={styles.actionIconBox}>
+                <Ionicons name="chatbubble" size={24} color="#C86DD7" />
+              </View>
+              <Text style={styles.actionText}>Chat with AI</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionCard}>
+              <View style={styles.actionIconBox}>
+                <Ionicons name="folder" size={24} color="#F77F00" />
+              </View>
+              <Text style={styles.actionText}>Projects</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* AI Insights */}
+          <Text style={styles.sectionTitle}>AI INSIGHTS</Text>
+          <View style={styles.insightCard}>
+            <View style={styles.insightIconBox}>
+              <Ionicons name="sparkles" size={20} color="#7B6CF6" />
+            </View>
+            <View style={styles.insightContent}>
+              <Text style={styles.insightText}>
+                Based on your progress, focus on{" "}
+                <Text style={styles.insightHighlight}>
+                  TypeScript and React Testing
+                </Text>{" "}
+                to boost your readiness by 15%.
+              </Text>
+              <TouchableOpacity>
+                <Text style={styles.insightLink}>View details →</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      )}
+
+      {activeTab === "learn" && (
+        <View style={{ flex: 1 }}>
+          <LearnScreen initialSkill={selectedSkillForLearn} />
         </View>
-      </ScrollView>
+      )}
+
+      {activeTab === "skills" && (
+        <View style={{ flex: 1 }}>
+          <SkillsScreen
+            onOpenResources={(skillId, skillName) => {
+              setSelectedSkillForLearn({ id: skillId, name: skillName });
+              setActiveTab("learn");
+            }}
+          />
+        </View>
+      )}
+
+      {activeTab === "chat" && (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ color: "#fff" }}>AI Chat coming soon</Text>
+        </View>
+      )}
 
       <View style={styles.bottomNavWrap}>
         <View style={styles.bottomNav}>
