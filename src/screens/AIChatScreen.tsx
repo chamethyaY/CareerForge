@@ -377,7 +377,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E0E12",
     gap: 12,
   },
-  loadingText: { fontSize: 13, color: "#6B6A7A" },
+  loadingText: {
+    fontSize: 14,
+    fontWeight: "400",
+    lineHeight: 20,
+    color: "#9CA3AF",
+  },
 
   // Header
   header: {
@@ -396,8 +401,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  headerTitle: { fontSize: 14, fontWeight: "500", color: "#fff" },
-  headerSub: { fontSize: 11, color: "#6B6A7A" },
+  headerTitle: { fontSize: 30, fontWeight: "700", color: "#fff" },
+  headerSub: {
+    fontSize: 16,
+    fontWeight: "400",
+    lineHeight: 24,
+    color: "#9CA3AF",
+  },
   onlineDot: {
     width: 8,
     height: 8,
@@ -407,7 +417,7 @@ const styles = StyleSheet.create({
   },
 
   // Messages
-  messagesList: { padding: 16, gap: 12 },
+  messagesList: { paddingTop: 32, paddingBottom: 120, paddingHorizontal: 16, gap: 12 },
   messageRow: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -426,7 +436,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     marginBottom: 2,
   },
-  bubble: { maxWidth: "78%", borderRadius: 14, padding: 11, minHeight: 40 },
+  bubble: { maxWidth: "78%", borderRadius: 14, padding: 12, minHeight: 48 },
   bubbleAI: {
     backgroundColor: "#14141C",
     borderWidth: 0.5,
@@ -434,7 +444,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
   },
   bubbleUser: { backgroundColor: "#534AB7", borderBottomRightRadius: 4 },
-  bubbleText: { fontSize: 13, lineHeight: 20, flexWrap: "wrap" },
+  bubbleText: { fontSize: 16, fontWeight: "500", lineHeight: 24, flexWrap: "wrap" },
   bubbleTextAI: { color: "#D4D3E0" },
   bubbleTextUser: { color: "#EEEDFE" },
 
