@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { supabase } from "../../services/supabase";
+import AIChatScreen from "../AIChatScreen";
 const SkillsScreen = require("./SkillsScreen").SkillsScreen;
 const LearnScreen = require("./LearnScreen").default;
 
@@ -125,6 +126,8 @@ export function MainApp({ onSignOut }: Props) {
             setActiveTab("learn");
           }}
         />
+      ) : activeTab === "chat" ? (
+        <AIChatScreen />
       ) : (
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -197,7 +200,10 @@ export function MainApp({ onSignOut }: Props) {
               </View>
               <Text style={styles.actionText}>View Roadmap</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionCard}>
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => setActiveTab("chat")}
+            >
               <View style={styles.actionIconBox}>
                 <Ionicons name="chatbubble" size={24} color="#C86DD7" />
               </View>
@@ -297,7 +303,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 40,
+    paddingTop: 32,
     paddingBottom: 120,
   },
   header: {
@@ -478,9 +484,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    paddingHorizontal: 12,
-    paddingBottom: 14,
-    paddingTop: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    paddingTop: 8,
     backgroundColor: "rgba(2, 6, 23, 0.92)",
     borderTopWidth: 1,
     borderTopColor: "rgba(255, 255, 255, 0.06)",
