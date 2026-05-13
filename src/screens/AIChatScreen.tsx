@@ -94,7 +94,11 @@ export default function AIChatScreen() {
         profile?.goal === "internship"
           ? "frontend internship"
           : profile?.goal || "your career goals";
-      const rolesText = profile?.roles ? (Array.isArray(profile.roles) ? profile.roles.join(", ") : String(profile.roles)) : "your profile role";
+      const rolesText = profile?.roles
+        ? Array.isArray(profile.roles)
+          ? profile.roles.join(", ")
+          : String(profile.roles)
+        : "your profile role";
       const welcomeMsg = `Hey ${userName}! 👋 I'm Forge AI, your personal career mentor. I can see you're aiming for a ${goalText} with interests in ${rolesText}. You've completed ${skillsCount} skills so far.\n\nWhat do you want to work on today?`;
       setWelcomeMessage(welcomeMsg);
 
@@ -417,7 +421,12 @@ const styles = StyleSheet.create({
   },
 
   // Messages
-  messagesList: { paddingTop: 32, paddingBottom: 120, paddingHorizontal: 16, gap: 12 },
+  messagesList: {
+    paddingTop: 32,
+    paddingBottom: 120,
+    paddingHorizontal: 16,
+    gap: 12,
+  },
   messageRow: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -444,7 +453,12 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
   },
   bubbleUser: { backgroundColor: "#534AB7", borderBottomRightRadius: 4 },
-  bubbleText: { fontSize: 16, fontWeight: "500", lineHeight: 24, flexWrap: "wrap" },
+  bubbleText: {
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 24,
+    flexWrap: "wrap",
+  },
   bubbleTextAI: { color: "#D4D3E0" },
   bubbleTextUser: { color: "#EEEDFE" },
 
