@@ -274,11 +274,6 @@ export default function AIChatScreen() {
                 maxLength={500}
                 blurOnSubmit={searchMode}
                 textAlignVertical="top"
-                onFocus={() => {
-                  if (!searchMode) {
-                    beginSearchMode();
-                  }
-                }}
                 onChangeText={(t) => {
                   if (searchMode) {
                     setSearchText(t);
