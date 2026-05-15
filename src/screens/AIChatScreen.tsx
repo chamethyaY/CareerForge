@@ -45,7 +45,7 @@ export default function AIChatScreen() {
 
       const { data: profile } = await supabase
         .from("user_profiles")
-        .select("goal, level, roles, name, full_name, display_name")
+        .select("goal, level, roles")
         .eq("id", user.id)
         .single();
 
@@ -64,12 +64,7 @@ export default function AIChatScreen() {
       setSystemPrompt(prompt);
 
       const userName =
-        profile?.name ||
-        profile?.full_name ||
-        profile?.display_name ||
-        user.user_metadata?.name ||
-        user.email?.split("@")[0] ||
-        "there";
+        user.user_metadata?.name || user.email?.split("@")[0] || "there";
 
       const goalText =
         profile?.goal === "internship"
@@ -175,17 +170,29 @@ export default function AIChatScreen() {
     const isLoading = item.content === "...";
 
     return (
-      <View style={[styles.messageRow, isAI ? styles.messageRowAI : styles.messageRowUser]}>
+      <View
+        style={[
+          styles.messageRow,
+          isAI ? styles.messageRowAI : styles.messageRowUser,
+        ]}
+      >
         {isAI ? (
           <View style={styles.aiAvatar}>
             <Ionicons name="sparkles" size={12} color="#fff" />
           </View>
         ) : null}
-        <View style={[styles.bubble, isAI ? styles.bubbleAI : styles.bubbleUser]}>
+        <View
+          style={[styles.bubble, isAI ? styles.bubbleAI : styles.bubbleUser]}
+        >
           {isLoading ? (
             <ActivityIndicator size="small" color="#7F77DD" />
           ) : (
-            <Text style={[styles.bubbleText, isAI ? styles.bubbleTextAI : styles.bubbleTextUser]}>
+            <Text
+              style={[
+                styles.bubbleText,
+                isAI ? styles.bubbleTextAI : styles.bubbleTextUser,
+              ]}
+            >
               {item.content}
             </Text>
           )}
@@ -261,14 +268,20 @@ export default function AIChatScreen() {
                   beginSearchMode();
                 }}
               >
-                <Ionicons name={searchMode ? "search" : "mic"} size={18} color="#9A99A8" />
+                <Ionicons
+                  name={searchMode ? "search" : "mic"}
+                  size={18}
+                  color="#9A99A8"
+                />
               </TouchableOpacity>
 
               <TextInput
                 ref={inputRef}
                 style={styles.input}
                 value={searchMode ? searchText : inputText}
-                placeholder={searchMode ? "Search messages..." : "Ask anything..."}
+                placeholder={
+                  searchMode ? "Search messages..." : "Ask anything..."
+                }
                 placeholderTextColor="#6B6A7A"
                 multiline={!searchMode}
                 maxLength={500}
@@ -292,12 +305,23 @@ export default function AIChatScreen() {
               />
 
               <TouchableOpacity
-                style={[styles.sendBtn, (!inputText.trim() || sending) && styles.sendBtnDisabled]}
+                style={[
+                  styles.sendBtn,
+                  (!inputText.trim() || sending) && styles.sendBtnDisabled,
+                ]}
                 onPress={() => handleSend()}
                 disabled={!inputText.trim() || sending || searchMode}
                 activeOpacity={0.7}
               >
-                <Ionicons name="send" size={18} color={inputText.trim() && !sending && !searchMode ? "#fff" : "#3A3A48"} />
+                <Ionicons
+                  name="send"
+                  size={18}
+                  color={
+                    inputText.trim() && !sending && !searchMode
+                      ? "#fff"
+                      : "#3A3A48"
+                  }
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -318,7 +342,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E0E12",
     gap: 12,
   },
-  loadingText: { fontSize: 14, fontWeight: "400", lineHeight: 20, color: "#9CA3AF" },
+  loadingText: {
+    fontSize: 14,
+    fontWeight: "400",
+    lineHeight: 20,
+    color: "#9CA3AF",
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -336,11 +365,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerTitle: { fontSize: 30, fontWeight: "700", color: "#fff" },
-  headerSub: { fontSize: 16, fontWeight: "400", lineHeight: 24, color: "#9CA3AF" },
-  onlineDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: "#1D9E75", marginLeft: "auto" },
+  headerSub: {
+    fontSize: 16,
+    fontWeight: "400",
+    lineHeight: 24,
+    color: "#9CA3AF",
+  },
+  onlineDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#1D9E75",
+    marginLeft: "auto",
+  },
   welcomeWrap: { paddingTop: 16 },
-  messagesList: { paddingTop: 16, paddingBottom: 220, paddingHorizontal: 16, gap: 12 },
-  messageRow: { flexDirection: "row", alignItems: "flex-end", gap: 8, marginBottom: 8 },
+  messagesList: {
+    paddingTop: 16,
+    paddingBottom: 220,
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+  messageRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 8,
+    marginBottom: 8,
+  },
   messageRowAI: { justifyContent: "flex-start" },
   messageRowUser: { justifyContent: "flex-end" },
   aiAvatar: {
@@ -354,9 +404,19 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   bubble: { maxWidth: "78%", borderRadius: 14, padding: 12, minHeight: 48 },
-  bubbleAI: { backgroundColor: "#14141C", borderWidth: 0.5, borderColor: "#2A2A36", borderBottomLeftRadius: 4 },
+  bubbleAI: {
+    backgroundColor: "#14141C",
+    borderWidth: 0.5,
+    borderColor: "#2A2A36",
+    borderBottomLeftRadius: 4,
+  },
   bubbleUser: { backgroundColor: "#534AB7", borderBottomRightRadius: 4 },
-  bubbleText: { fontSize: 16, fontWeight: "500", lineHeight: 24, flexWrap: "wrap" },
+  bubbleText: {
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 24,
+    flexWrap: "wrap",
+  },
   bubbleTextAI: { color: "#D4D3E0" },
   bubbleTextUser: { color: "#EEEDFE" },
   inputBar: {
@@ -387,7 +447,21 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: "#fff",
   },
-  sendBtn: { width: 44, minHeight: 44, borderRadius: 22, backgroundColor: "#534AB7", alignItems: "center", justifyContent: "center", flexShrink: 0 },
+  sendBtn: {
+    width: 44,
+    minHeight: 44,
+    borderRadius: 22,
+    backgroundColor: "#534AB7",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
   sendBtnDisabled: { backgroundColor: "#1A1A22" },
-  leftIconWrap: { width: 36, minHeight: 44, alignItems: "center", justifyContent: "center", marginRight: 4 },
+  leftIconWrap: {
+    width: 36,
+    minHeight: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 4,
+  },
 });
