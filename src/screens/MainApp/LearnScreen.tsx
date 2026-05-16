@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 0.5,
     overflow: "hidden",
-    marginBottom: 16,
+    marginBottom: 24,
   },
   domainPrimary: {
     backgroundColor: "#1E1E1E",
